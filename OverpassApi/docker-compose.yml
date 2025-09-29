@@ -22,7 +22,7 @@ services:
       - overpass-init
     restart: unless-stopped
     ports:
-      - "8080:80"         # публикуем порт ТОЛЬКО здесь
+      - "8082:80"         # публикуем порт ТОЛЬКО здесь
     volumes:
       - ./db:/db
     environment:
