@@ -1,0 +1,30 @@
+services:
+  overpass-init:
+    image: wiktorn/overpass-api:latest
+    container_name: overpass-init
+    restart: "no"
+    # ports:   <-- УДАЛИТЬ этот блок у init
+    #   - "8080:80"
+    volumes:
+      - ./db:/db
+    environment:
+      - OVERPASS_MODE=init
+      - OVERPASS_PLANET_URL=file:///db/region.osm.bz2
+      - OVERPASS_DIFF_URL=
+      - OVERPASS_META=no
+      - OVERPASS_USE_AREAS=true
+      - OVERPASS_STOP_AFTER_INIT=true
+
+  overpass:
+    image: wiktorn/overpass-api:latest
+    container_name: overpass
+    depends_on:
+      - overpass-init
+    restart: unless-stopped
+    ports:
+      - "8080:80"         # публикуем порт ТОЛЬКО здесь
+    volumes:
+      - ./db:/db
+    environment:
+      - OVERPASS_STOP_AFTER_INIT=false
+      - OVERPASS_USE_AREAS=true

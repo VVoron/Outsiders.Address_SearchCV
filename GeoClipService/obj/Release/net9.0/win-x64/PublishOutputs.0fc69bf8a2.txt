@@ -1,0 +1,9 @@
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\appsettings.json
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\global.json
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\GeoClipService.pdb
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\onnxruntime.dll
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\onnxruntime_providers_shared.dll
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\aspnetcorev2_inprocess.dll
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\onnxruntime.lib
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\onnxruntime_providers_shared.lib
+C:\Users\Heaven\Projects\GeoClipService\bin\Release\net9.0\win-x64\publish\GeoClipService.exe

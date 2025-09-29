@@ -1,0 +1,180 @@
+{
+  "version": 8,
+  "name": "region-labels",
+  "glyphs": "http://localhost:8081/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "region": {
+      "type": "vector",
+      "url": "http://localhost:8081/data/region.json"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": { "background-color": "#f8f9fb" }
+    },
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "region",
+      "source-layer": "water",
+      "paint": { "fill-color": "#cfe8ff" }
+    },
+    {
+      "id": "building",
+      "type": "fill",
+      "source": "region",
+      "source-layer": "building",
+      "minzoom": 15,
+      "paint": {
+        "fill-color": "#dadada",
+        "fill-outline-color": "#c2c2c2"
+      }
+    },
+    {
+      "id": "roads",
+      "type": "line",
+      "source": "region",
+      "source-layer": "transportation",
+      "filter": ["in", "class", "motorway", "trunk", "primary", "secondary", "tertiary", "minor", "service"],
+      "paint": {
+        "line-color": [
+          "match",
+          ["get", "class"],
+          "motorway", "#f3a09e",
+          "trunk", "#f8b19e",
+          "primary", "#f9c29e",
+          "secondary", "#f4d3a1",
+          "tertiary", "#e5e5e5",
+          "minor", "#dbdbdb",
+          "service", "#dbdbdb",
+          "#d0d0d0"
+        ],
+        "line-width": [
+          "interpolate", ["linear"], ["zoom"],
+          10, 0.4,
+          12, 0.8,
+          14, 1.2,
+          16, 2.0,
+          18, 5.0
+        ]
+      }
+    },
+    {
+      "id": "road-labels",
+      "type": "symbol",
+      "source": "region",
+      "source-layer": "transportation_name",
+      "minzoom": 12,
+      "filter": ["has", "name"],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": [
+          "coalesce",
+          ["get", "name:ru"],
+          ["get", "name:lv"],
+          ["get", "name:en"],
+          ["get", "name"]
+        ],
+        "text-font": ["Noto Sans Regular", "Open Sans Regular"],
+        "text-size": [
+          "interpolate", ["linear"], ["zoom"],
+          12, 10,
+          15, 13,
+          18, 16
+        ],
+        "text-max-angle": 30,
+        "text-padding": 1,
+        "text-rotation-alignment": "map",
+        "text-letter-spacing": 0.01
+      },
+      "paint": {
+        "text-color": "#3a3a3a",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1,
+        "text-halo-blur": 0.5
+      }
+    },
+    {
+      "id": "place-labels",
+      "type": "symbol",
+      "source": "region",
+      "source-layer": "place",
+      "minzoom": 3,
+      "layout": {
+        "text-field": [
+          "coalesce",
+          ["get", "name:ru"],
+          ["get", "name:lv"],
+          ["get", "name:en"],
+          ["get", "name"]
+        ],
+        "text-font": ["Noto Sans Regular", "Open Sans Regular"],
+        "text-size": [
+          "interpolate", ["linear"], ["zoom"],
+          3, 10,
+          8, 12,
+          12, 16
+        ]
+      },
+      "paint": {
+        "text-color": "#333333",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "housenumbers",
+      "type": "symbol",
+      "source": "region",
+      "source-layer": "housenumber",
+      "minzoom": 17,
+      "layout": {
+        "text-field": ["get", "housenumber"],
+        "text-font": ["Noto Sans Regular", "Open Sans Regular"],
+        "text-size": [
+          "interpolate", ["linear"], ["zoom"],
+          17, 11,
+          19, 13
+        ],
+        "text-allow-overlap": false,
+        "text-padding": 2
+      },
+      "paint": {
+        "text-color": "#555555",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 0.8
+      }
+    },
+    {
+      "id": "poi-labels",
+      "type": "symbol",
+      "source": "region",
+      "source-layer": "poi",
+      "minzoom": 15,
+      "layout": {
+        "text-field": [
+          "coalesce",
+          ["get", "name:ru"],
+          ["get", "name:lv"],
+          ["get", "name:en"],
+          ["get", "name"]
+        ],
+        "text-font": ["Noto Sans Regular", "Open Sans Regular"],
+        "text-size": [
+          "interpolate", ["linear"], ["zoom"],
+          15, 11,
+          19, 13
+        ],
+        "text-offset": [0, 0.6],
+        "text-anchor": "top"
+      },
+      "paint": {
+        "text-color": "#4a4a4a",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 0.8
+      }
+    }
+  ]
+}

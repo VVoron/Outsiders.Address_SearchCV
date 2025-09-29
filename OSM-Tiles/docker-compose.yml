@@ -1,0 +1,9 @@
+services:
+  tileserver-gl:
+    image: maptiler/tileserver-gl:latest
+    container_name: tileserver-gl
+    ports:
+      - "8081:8080"             # UI и тайлы на http://localhost:8081
+    volumes:
+      - ./data:/data            # тут region.mbtiles
+    command: ["-p","8080","-c","/data/tileserver.json"]

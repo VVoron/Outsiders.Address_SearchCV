@@ -1,0 +1,17 @@
+{
+  "options": {
+    "paths": {
+      "root": "/data"
+    }
+  },
+  "data": {
+    "region": {
+      "mbtiles": "/data/region.mbtiles"
+    }
+  },
+  "styles": {
+    "default": {
+      "style": "styles/default/style.json"
+    }
+  }
+}
