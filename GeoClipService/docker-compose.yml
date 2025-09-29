@@ -7,6 +7,6 @@
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
-      DATABASE_URL: "postgresql://geoclipuser:VeryDificultPassword123654@host.docker.internal:5432/geoclip"
+      DATABASE_URL: "postgresql://geoclipuser:VeryDificultPassword123654@172.19.0.1:5432/GeoClip"
     ports:
       - "8080:8080"
