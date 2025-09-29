@@ -9,6 +9,5 @@
     environment:
       ConnectionStrings__DefaultConnection: "Host=host.docker.internal;Port=5432;Username=geoclipuser;Password=VeryDificultPassword123654;Database=geoclip;IncludeErrorDetail=true"
       ConnectionStrings__HangfireConnection: "Host=host.docker.internal;Port=5432;Username=geoclipuser;Password=VeryDificultPassword123654;Database=geoclip"
-      DATABASE_URL: "postgresql://geoclipuser:VeryDificultPassword123654@host.docker.internal:5432/geoclip"
     ports:
       - "8080:8080"
