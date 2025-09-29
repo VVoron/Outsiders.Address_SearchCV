@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GeoClipService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+26615d18a709e94d0ad07c3bdbb6fc051f4a8666")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+879e9799b0c564abc27b2c055b6f2d97a96da512")]
 [assembly: System.Reflection.AssemblyProductAttribute("GeoClipService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GeoClipService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
