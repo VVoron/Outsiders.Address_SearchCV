@@ -4,9 +4,8 @@
     build:
       context: .
       dockerfile: Dockerfile
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    network_mode: host
     environment:
-      DATABASE_URL: "postgresql://geoclipuser:VeryDificultPassword123654@172.19.0.1:5432/GeoClip"
+      DATABASE_URL: "postgresql://geoclipuser:VeryDificultPassword123654@127.0.0.1:5432/GeoClip"
     ports:
       - "8080:8080"

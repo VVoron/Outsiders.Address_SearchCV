@@ -1,11 +1,11 @@
 {
   "version": 8,
   "name": "region-labels",
-  "glyphs": "http://localhost:8081/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "http://51.250.115.228:8081/fonts/{fontstack}/{range}.pbf",
   "sources": {
     "region": {
       "type": "vector",
-      "url": "http://localhost:8081/data/region.json"
+      "url": "http://51.250.115.228:8081/data/region.json"
     }
   },
   "layers": [
