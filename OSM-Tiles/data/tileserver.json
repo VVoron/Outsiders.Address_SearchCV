@@ -1,7 +1,8 @@
 {
   "options": {
     "paths": {
-      "root": "/data"
+      "root": "/data",
+      "fonts": "fonts"
     }
   },
   "data": {
