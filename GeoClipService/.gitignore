@@ -1,0 +1,69 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]*/
+[Dd]ist/
+publish/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Test
+[Tt]est[Rr]esults/
+*.trx
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+project.lock.json
+# Папка .nuget в решениях иногда нужна, если храните конфиг — на своё усмотрение
+# .nuget/
+
+# Resharper / Rider / JetBrains
+_ReSharper*/
+*.[Rr]e[Ss]harper
+.idea/
+
+# IIS / Azure publish
+*.Publish.xml
+*.pubxml
+*.pubxml.user
+PublishProfiles/
+*.publishsettings
+
+# Node/SPA (если есть фронтенд в проекте)
+node_modules/
+wwwroot/lib/
+# Если используете npm/yarn/pnpm — lock-файлы обычно коммитят. Не игнорируйте их.
+
+# Пользовательские секреты/локальные конфиги
+**/appsettings.Development.json
+**/appsettings.*.Development.json
+**/appsettings.Local.json
+**/appsettings.*.Local.json
+secrets.json
+
+# Системные артефакты
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
