@@ -1,0 +1,79 @@
+{
+  "version": 8,
+  "name": "positron-lite",
+  "glyphs": "http://51.250.115.228:8081/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "openmaptiles": {
+      "type": "vector",
+      "url": "http://51.250.115.228:8081/data/region.json"
+    }
+  },
+  "layers": [
+    { "id": "bg", "type": "background", "paint": { "background-color": "#f7f8fa" } },
+
+    { "id": "water", "type": "fill", "source": "openmaptiles", "source-layer": "water", "paint": { "fill-color": "#cfe6ff" } },
+    { "id": "park", "type": "fill", "source": "openmaptiles", "source-layer": "park", "paint": { "fill-color": "#e7f4e4" } },
+    { "id": "forest", "type": "fill", "source": "openmaptiles", "source-layer": "landcover", "filter": ["==","class","wood"], "paint": { "fill-color": "#e5f0e2" } },
+
+    { "id": "building", "type": "fill", "source": "openmaptiles", "source-layer": "building", "minzoom": 13,
+      "paint": { "fill-color": "#dfe3e6", "fill-outline-color": "#cfd5da" } },
+
+    { "id": "road-casing-major", "type": "line", "source": "openmaptiles", "source-layer": "transportation",
+      "filter": ["in","class","motorway","trunk","primary"],
+      "paint": { "line-color": "#fff", "line-width": ["interpolate",["linear"],["zoom"],10,1.2,14,3,16,5,18,8] } },
+    { "id": "road-fill-major", "type": "line", "source": "openmaptiles", "source-layer": "transportation",
+      "filter": ["in","class","motorway","trunk","primary"],
+      "paint": { "line-color": "#f0b9a8", "line-width": ["interpolate",["linear"],["zoom"],10,0.8,14,2.2,16,4,18,6] } },
+
+    { "id": "road-casing-minor", "type": "line", "source": "openmaptiles", "source-layer": "transportation",
+      "filter": ["in","class","secondary","tertiary","minor","service","residential"],
+      "paint": { "line-color": "#fff", "line-width": ["interpolate",["linear"],["zoom"],10,0.8,14,2,16,3,18,5] } },
+    { "id": "road-fill-minor", "type": "line", "source": "openmaptiles", "source-layer": "transportation",
+      "filter": ["in","class","secondary","tertiary","minor","service","residential"],
+      "paint": { "line-color": "#e1e5e9", "line-width": ["interpolate",["linear"],["zoom"],10,0.6,14,1.6,16,2.4,18,4] } },
+
+    { "id": "rail", "type": "line", "source": "openmaptiles", "source-layer": "transportation",
+      "filter": ["==","class","rail"], "paint": { "line-color": "#c6ccd2", "line-width": ["interpolate",["linear"],["zoom"],10,0.4,14,0.8,16,1.2] } },
+
+    { "id": "road-labels", "type": "symbol", "source": "openmaptiles", "source-layer": "transportation_name", "minzoom": 12,
+      "filter": ["has","name"],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": ["coalesce", ["get","name:ru"], ["get","name"], ["get","name:en"]],
+        "text-font": ["Noto Sans Regular","Open Sans Regular"],
+        "text-size": ["interpolate",["linear"],["zoom"],12,10,15,13,18,16],
+        "text-rotation-alignment": "map"
+      },
+      "paint": { "text-color": "#59636b", "text-halo-color": "#fff", "text-halo-width": 1 }
+    },
+
+    { "id": "place-labels", "type": "symbol", "source": "openmaptiles", "source-layer": "place", "minzoom": 3,
+      "layout": {
+        "text-field": ["coalesce", ["get","name:ru"], ["get","name"], ["get","name:en"]],
+        "text-font": ["Noto Sans Regular","Open Sans Regular"],
+        "text-size": ["interpolate",["linear"],["zoom"],4,10,8,12,12,16]
+      },
+      "paint": { "text-color": "#334155", "text-halo-color": "#fff", "text-halo-width": 1 }
+    },
+
+    { "id": "poi-labels", "type": "symbol", "source": "openmaptiles", "source-layer": "poi", "minzoom": 15,
+      "layout": {
+        "text-field": ["coalesce", ["get","name:ru"], ["get","name"], ["get","name:en"]],
+        "text-font": ["Noto Sans Regular","Open Sans Regular"],
+        "text-size": ["interpolate",["linear"],["zoom"],15,11,19,13],
+        "text-offset": [0,0.6], "text-anchor": "top"
+      },
+      "paint": { "text-color": "#475569", "text-halo-color": "#fff", "text-halo-width": 0.8 }
+    },
+
+    { "id": "housenumbers", "type": "symbol", "source": "openmaptiles", "source-layer": "housenumber", "minzoom": 17,
+      "layout": {
+        "text-field": ["get","housenumber"],
+        "text-font": ["Noto Sans Regular","Open Sans Regular"],
+        "text-size": ["interpolate",["linear"],["zoom"],17,11,19,13],
+        "text-allow-overlap": false, "text-padding": 2
+      },
+      "paint": { "text-color": "#525a61", "text-halo-color": "#fff", "text-halo-width": 0.8 }
+    }
+  ]
+}
