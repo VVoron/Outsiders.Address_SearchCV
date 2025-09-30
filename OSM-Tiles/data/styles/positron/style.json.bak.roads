@@ -232,7 +232,7 @@
       "minzoom": 12,
       "filter": [
         "has",
-        "name:latin"
+        "name"
       ],
       "layout": {
         "symbol-placement": "line",
@@ -244,15 +244,15 @@
           ],
           [
             "get",
+            "name:ru"
+          ],
+          [
+            "get",
             "name"
           ],
           [
             "get",
             "name:en"
-          ],
-          [
-            "get",
-            "name:ru"
           ]
         ],
         "text-font": [

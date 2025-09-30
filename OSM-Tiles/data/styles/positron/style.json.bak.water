@@ -232,7 +232,7 @@
       "minzoom": 12,
       "filter": [
         "has",
-        "name:latin"
+        "name"
       ],
       "layout": {
         "symbol-placement": "line",
@@ -244,15 +244,15 @@
           ],
           [
             "get",
+            "name:ru"
+          ],
+          [
+            "get",
             "name"
           ],
           [
             "get",
             "name:en"
-          ],
-          [
-            "get",
-            "name:ru"
           ]
         ],
         "text-font": [
@@ -369,56 +369,6 @@
         "text-color": "#525a61",
         "text-halo-color": "#fff",
         "text-halo-width": 0.8
-      }
-    },
-    {
-      "id": "water-name-labels",
-      "type": "symbol",
-      "source": "openmaptiles",
-      "source-layer": "water_name",
-      "minzoom": 6,
-      "layout": {
-        "text-field": [
-          "coalesce",
-          [
-            "get",
-            "name:latin"
-          ],
-          [
-            "get",
-            "name"
-          ],
-          [
-            "get",
-            "name:en"
-          ],
-          [
-            "get",
-            "name:ru"
-          ]
-        ],
-        "text-font": [
-          "Open Sans Regular"
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          6,
-          10,
-          12,
-          14
-        ],
-        "symbol-placement": "line"
-      },
-      "paint": {
-        "text-color": "#5b6b7a",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
       }
     }
   ]
