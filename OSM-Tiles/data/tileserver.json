@@ -10,8 +10,7 @@
     }
   },
   "styles": {
-    "default": {
-      "style": "styles/default/style.json"
-    }
+    "default": { "style": "styles/default/style.json" },
+    "positron": { "style": "styles/positron/style.json" }
   }
 }
