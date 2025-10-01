@@ -61,16 +61,21 @@ public class PredictService : IDisposable
         {
             NamedOnnxValue.CreateFromTensor("pixel_values", pixelValues)
         };
-
-
+        
         using var results = _session.Run(inputs);
             
         var (lat, lon) = ExtractLatLon(results);
+        //
+        // return new PredictionResult
+        // {
+        //     Latitude =  _latMin + (lat * (_latMax - _latMin)),
+        //     Longitude = _lonMin + (lon * (_lonMax - _lonMin)),
+        // };
 
-        return new PredictionResult
+        return new PredictionResult()
         {
-            Latitude =  _latMin + (lat * (_latMax - _latMin)),
-            Longitude = _lonMin + (lon * (_lonMax - _lonMin)),
+            Latitude = lat,
+            Longitude = lon
         };
     }
         
