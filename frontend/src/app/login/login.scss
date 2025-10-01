@@ -1,0 +1,117 @@
+/* Общий фон */
+body, .login-page {
+  background: #ffffff; // белый фон всей страницы
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Хедер */
+.app-header {
+  background: #ffffff;
+  padding: 20px 40px;
+  text-align: left;
+
+  h1 {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #000;
+    white-space: pre-line; // перенос строк
+  }
+}
+
+/* Центровка страницы */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px); // минус высота хедера
+}
+
+/* Блок формы */
+.login-box {
+  background: #D9D9D9; // серый фон блока
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 32px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 100%;
+    color: #000;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    input {
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      outline: none;
+
+      &::placeholder {
+        color: #555;
+        font-size: 14px;
+      }
+
+      &:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 4px rgba(52,152,219,0.4);
+      }
+    }
+
+    .btn-primary {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+
+    .error {
+      margin-top: 8px;
+      color: #e74c3c;
+      font-size: 13px;
+    }
+  }
+}
+
+
+.btn-secondary {
+  background-color: #fff;
+  color: #3498db;
+  border: 2px solid #3498db;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
+
+  &:hover {
+    background-color: #3498db;
+    color: #fff;
+  }
+}

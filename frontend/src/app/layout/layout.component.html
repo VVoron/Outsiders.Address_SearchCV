@@ -1,0 +1,32 @@
+<div class="layout">
+  <header class="header">
+    <div class="header-left">
+      <h1>
+        ЛИДЕРЫ<br />
+        ЦИФРОВЫХ<br />
+        ТРАНСФОРМАЦИЙ
+      </h1>
+    </div>
+
+    <div class="header-actions">
+    <a class="header-btn request" [class.active]="activePage === 'request'" routerLink="/request">Запрос</a>
+    <a class="header-btn history" [class.active]="activePage === 'recognition'" routerLink="/recognition">История<br />запросов</a>
+    <a class="header-btn admin" [class.active]="activePage === 'admin'" routerLink="/admin">
+        Пользователи
+    </a>
+
+    <div class="profile-circle" (click)="toggleMenu()">
+      {{ usernameFirstLetter }}
+    </div>
+
+    <div class="profile-menu" *ngIf="showMenu">
+      <button class="logout-btn" (click)="logout()">Выйти</button>
+    </div>
+
+    </div>
+  </header>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

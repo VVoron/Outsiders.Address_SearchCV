@@ -1,0 +1,85 @@
+<div class="recognition-container">
+  <div class="recognition-header">
+    <h2>История поиска по фотографиям</h2>
+  </div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Выбрать</th>
+      <th>№</th>
+      <th>Дата загрузки</th>
+      <th>Фото</th>
+      <th>Адрес</th>
+      <th>Координаты</th>
+      <th>Статус</th>
+      <th>Действия</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of data">
+      <td><input type="checkbox" [(ngModel)]="row.selected" /></td>
+      <td>{{ row.id }}</td>
+      <td>{{ row.date }}</td>
+      <td>
+        <img
+          *ngIf="row.preview_url"
+          [src]="row.preview_url"
+          alt="Фото"
+          width="60"
+          loading="lazy"
+          (click)="openImage(row.preview_url)"
+          style="cursor: zoom-in"
+        />
+      </td>
+        <div class="image-modal" *ngIf="selectedImage" (click)="closeImage()">
+          <img [src]="selectedImage" alt="Полный размер" />
+      </div>
+
+      <td>{{ row.address || '—' }}</td>
+      <td>{{ row.lat }}{{ row.lat && row.lon ? ', ' : '' }}{{ row.lon }}</td>
+      <td>{{ row.status }}</td>
+      <td>
+        <button class="delete-btn" (click)="deleteRow(row.id)">Удалить</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+  <div class="table-footer">
+    <div class="pagination">
+      <button
+        class="page-btn"
+        [disabled]="currentPage === 1"
+        (click)="loadPage(currentPage - 1)">
+        «
+      </button>
+
+      <button
+        *ngFor="let page of [].constructor(lastPage); let i = index"
+        class="page-btn"
+        [class.active]="currentPage === i + 1"
+        (click)="loadPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+
+      <button
+        class="page-btn"
+        [disabled]="currentPage === lastPage"
+        (click)="loadPage(currentPage + 1)">
+        »
+      </button>
+    </div>
+
+    <a class="map-link" (click)="goToMap()">Отобразить на карте</a>
+
+
+  </div>
+</div>
+
+<app-upload-modal
+  *ngIf="showModal"
+  (close)="showModal = false"
+  (uploaded)="handleFile($event)">
+</app-upload-modal>
