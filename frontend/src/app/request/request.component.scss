@@ -1,0 +1,115 @@
+.request-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Вкладки */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .tab {
+    padding: 12px 24px;
+    border-radius: 40px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    background: #d9d9d9;
+    color: #000;
+
+    &.active {
+      background: #5d5d5d;
+      color: #fff;
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .map-circle {
+    margin-left: auto;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: #3498db;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 14px;
+  }
+}
+
+/* Зона загрузки */
+.upload-area {
+  background: #f9f9f9;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+
+  h3 {
+    margin-bottom: 16px;
+  }
+
+  input[type='file'] {
+    margin: 12px 0;
+  }
+
+  .photos {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 12px 0;
+
+    .photo {
+      position: relative;
+      flex: 0 0 auto;
+
+      img {
+        max-height: 120px;
+        border-radius: 8px;
+      }
+
+      .remove-btn {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+/* Кнопка отправки */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+
+  .submit-btn {
+    background: #3498db;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}

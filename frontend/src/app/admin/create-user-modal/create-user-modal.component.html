@@ -1,0 +1,18 @@
+<div class="modal-backdrop">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3>Создание пользователя</h3>
+      <span class="close-btn" (click)="close.emit()">×</span>
+    </div>
+    <div class="modal-body">
+      <input type="text" placeholder="Имя пользователя" [(ngModel)]="username">
+      <input type="password" placeholder="Пароль" [(ngModel)]="password">
+      <input type="password" placeholder="Повторите пароль" [(ngModel)]="re_password">
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="close.emit()">Отмена</button>
+      <button class="submit-btn" (click)="submit()">Создать</button>
+    </div>
+  </div>
+</div>

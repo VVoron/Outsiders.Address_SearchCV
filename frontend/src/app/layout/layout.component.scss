@@ -1,0 +1,141 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Шапка */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+
+  .header-left h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 100%;
+    color: #000;
+    white-space: pre-line;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: relative; // 👈 теперь меню будет позиционироваться относительно этого блока
+  }
+
+
+  .header-btn {
+    height: 65px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+
+    &.request {
+      width: 163px;
+      background: #d9d9d9;
+      color: #000;
+    }
+
+    &.history {
+      width: 163px;
+      background: #d9d9d9;
+      color: #000;
+    }
+
+    &.active {
+      outline: 3px solid #000; /* подсветка активного круга */
+    }
+
+    &.admin {
+      width: 163px;
+      background: #d9d9d9;
+      color: #000;
+    }
+  }
+
+
+  .profile-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #D9D9D9;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 32px;
+  }
+}
+
+/* Контент */
+.content {
+  flex: 1;
+  padding: 40px;
+  background: #fff;
+}
+
+
+.logout-btn {
+  background-color: #e74c3c;   // красный фон
+  color: #000;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+
+  &:hover {
+    background-color: #c0392b; // темнее при наведении
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background-color: #a93226;
+    transform: translateY(0);
+  }
+}
+
+
+.profile-menu {
+  position: absolute;
+  top: 70px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 8px 0;
+  min-width: 140px;
+  z-index: 100;
+
+  button {
+    width: 100%;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+}

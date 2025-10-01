@@ -1,0 +1,38 @@
+<div class="modal-backdrop">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3>Загрузка фотоматериалов</h3>
+      <span class="close-btn" (click)="close.emit()">×</span>
+    </div>
+    <div class="modal-body">
+      <input type="file" (change)="onFileChange($event)">
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <div *ngIf="imageChangedEvent && !errorMessage">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="false"
+          [resizeToWidth]="800"
+          format="png"
+          (imageCropped)="imageCropped($event)">
+        </image-cropper>
+      </div>
+
+      <div *ngIf="croppedImage" class="preview">
+        <h4>Предпросмотр:</h4>
+        <img [src]="croppedImage" alt="Preview">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="close.emit()">Отмена</button>
+      <button class="submit-btn"
+              type="button"
+              (click)="submit()"
+              [disabled]="isUploading || !!errorMessage">
+        {{ isUploading ? 'Загрузка...' : 'Отправить' }}
+      </button>
+
+
+    </div>
+  </div>
+</div>

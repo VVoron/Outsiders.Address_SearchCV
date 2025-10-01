@@ -1,0 +1,30 @@
+<div class="request-container">
+  <!-- Вкладки -->
+  <div class="tabs">
+    <button class="tab active">Фото</button>
+    <button class="tab disabled">Координаты/Адрес</button>
+    <button class="tab disabled">Архив</button>
+    <a class="map-circle" routerLink="/map">Карта</a>
+  </div>
+
+  <!-- Зона загрузки -->
+  <div class="upload-area">
+    <h3>Область загрузки и просмотра фотографий</h3>
+    <input type="file" multiple (change)="onFileChange($event)" />
+    <p *ngIf="photos.length === 0">На данный момент нет загруженных фотографий</p>
+
+    <div class="photos" *ngIf="photos.length > 0">
+      <div class="photo" *ngFor="let photo of photos; let i = index">
+        <img [src]="photo.url" alt="Загруженное фото" />
+        <button class="remove-btn" (click)="removePhoto(i)">×</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Кнопка отправки -->
+  <div class="actions">
+    <button class="submit-btn" (click)="submit()" [disabled]="photos.length === 0">
+      Отправить
+    </button>
+  </div>
+</div>
