@@ -11,7 +11,7 @@
     <div class="header-actions">
     <a class="header-btn request" [class.active]="activePage === 'request'" routerLink="/request">Запрос</a>
     <a class="header-btn history" [class.active]="activePage === 'recognition'" routerLink="/recognition">История<br />запросов</a>
-    <a class="header-btn admin" [class.active]="activePage === 'admin'" routerLink="/admin">
+    <a  *ngIf="isSuperuser" class="header-btn admin" [class.active]="activePage === 'admin'" routerLink="/admin">
         Пользователи
     </a>
 

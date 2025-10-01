@@ -16,6 +16,7 @@ export class LayoutComponent implements OnInit {
   activePage: 'request' | 'recognition' | 'admin' | null = null;
 
   showMenu = false; //флаг для меню
+  isSuperuser = false;
 
   constructor(private auth: AuthService, private router: Router) {}
 
@@ -25,6 +26,7 @@ export class LayoutComponent implements OnInit {
         if (res?.username) {
           this.usernameFirstLetter = res.username.charAt(0).toUpperCase();
         }
+        this.isSuperuser = !!res?.is_superuser;
       },
       error: () => {
         this.usernameFirstLetter = '?';
