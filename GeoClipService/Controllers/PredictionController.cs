@@ -8,6 +8,7 @@ using GeoClipService.Services;
 using Hangfire;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace GeoClipService.Controllers;
 

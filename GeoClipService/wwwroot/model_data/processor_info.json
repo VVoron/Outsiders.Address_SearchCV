@@ -1,0 +1,28 @@
+{
+  "vision_model_name": "geo-clip",
+  "expected_input_shape": [
+    3,
+    224,
+    224
+  ],
+  "type": "CLIP",
+  "mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "resize": [
+    224,
+    224
+  ],
+  "lat_min": 25.61625,
+  "lat_max": 65.20046,
+  "lon_min": 25.14838,
+  "lon_max": 82.65452,
+  "note": "Image should be resized, normalized with CLIP stats, and converted to Tensor [C, H, W] before being batched."
+}

@@ -24,8 +24,7 @@ public class IncomingJobService(PredictService svc, IBackgroundJobClient jobs, S
                 {
                     TaskId = dto.TaskId,
                     Status = "Succeeded",
-                    Result = new PredictionResult
-                        { Latitude = result.Latitude * 90f, Longitude = result.Longitude * 180f },
+                    Result = result,
                     CallbackUrl = callbackUrl
                 }));
         }

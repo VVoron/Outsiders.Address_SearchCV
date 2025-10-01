@@ -17,7 +17,11 @@ public class PredictService : IDisposable
     private readonly float[] _imageStd;
     private readonly int _imageSizeW;
     private readonly int _imageSizeH;
-        
+    private readonly double _latMin;
+    private readonly double _latMax;
+    private readonly double _lonMin;
+    private readonly double _lonMax;
+    
     public PredictService(string modelPath, string configPath)
     {
         if (!File.Exists(modelPath))
@@ -42,6 +46,11 @@ public class PredictService : IDisposable
         var imageSize = ((JArray)cfg["resize"]).ToObject<int[]>() ?? throw new("image_size missing");
         _imageSizeW = imageSize[0];
         _imageSizeH = imageSize[1];
+
+        _latMin = (double)cfg["lat_min"];
+        _latMax = (double)cfg["lat_max"];
+        _lonMin = (double)cfg["lon_min"];
+        _lonMax = (double)cfg["lon_max"];
     }
         
     public async Task<PredictionResult> PredictFromImage(Stream imageStream)
@@ -60,8 +69,8 @@ public class PredictService : IDisposable
 
         return new PredictionResult
         {
-            Latitude = lat,
-            Longitude = lon
+            Latitude =  _latMin + (lat * (_latMax - _latMin)),
+            Longitude = _lonMin + (lon * (_lonMax - _lonMin)),
         };
     }
         
