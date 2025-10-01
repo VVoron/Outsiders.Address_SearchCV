@@ -375,11 +375,11 @@ class GetUserImageLocationsView(APIView):
 
     def get(self, request, *args, **kwargs):
         # Проверяем, является ли пользователь суперпользователем или админом
-        if not (request.user.is_superuser or request.user.groups.filter(name='Admins').exists()):
-            return Response(
-                {"error": "Only superusers or admins are allowed"},
-                status=status.HTTP_403_FORBIDDEN
-            )
+        # if not (request.user.is_superuser or request.user.groups.filter(name='Admins').exists()):
+        #     return Response(
+        #         {"error": "Only superusers or admins are allowed"},
+        #         status=status.HTTP_403_FORBIDDEN
+        #     )
 
         # Получаем текущего пользователя
         user = request.user
