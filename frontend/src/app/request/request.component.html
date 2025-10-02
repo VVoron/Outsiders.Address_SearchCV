@@ -23,7 +23,7 @@
 
   <!-- Кнопка отправки -->
   <div class="actions">
-    <button class="submit-btn" (click)="submit()" [disabled]="photos.length === 0">
+    <button class="submit-btn" (click)="submit()" [disabled]="photos.length === 0 || isUploading">
       Отправить
     </button>
   </div>
