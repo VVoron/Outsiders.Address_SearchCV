@@ -18,10 +18,7 @@ services:
       - .:/app
     depends_on:
       - redis
-      - postgres
-#      - minio
     environment:
-      - POSTGRES_HOST=postgres
       - REDIS_URL=redis://redis:6379/0
     ports:
     - "8000:8000"
@@ -43,22 +40,6 @@ services:
     volumes:
       - static_volume:/var/www/static
       - media_volume:/var/www/media
-    restart: unless-stopped
-    networks:
-      - lct
-
-  postgres:
-    image: postgres:16-alpine
-    container_name: postgres
-    env_file: .env
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    expose:
-      - "5433"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 5s
-      retries: 5
     restart: unless-stopped
     networks:
       - lct
@@ -86,7 +67,6 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - postgres
       - redis
     networks:
       - lct
