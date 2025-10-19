@@ -15,8 +15,9 @@ export interface TokenResponse {
   refresh?: string;
 }
 
-export interface MeResponse {
+export interface ApiUserResponse {
   id: number;
   email: string;
   username: string;
+  is_superuser: boolean;
 }

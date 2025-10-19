@@ -1,0 +1,96 @@
+$background-color: #1B1C1C;
+$text-color: #F6EFD8;
+
+.icon-btn {
+  height: 50px;
+  border-radius: 8px 8px 0 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.icon-btn svg{
+  width: 32px;
+  height: 32px;
+}
+
+.icon-btn:hover { 
+  background: rgba(255,255,255,.08);
+ }
+
+ .grid-btns{
+    background-color: $background-color;
+    border-radius: 12px 12px 0 0;
+    position: relative;
+    display: block;
+    height: 50px;
+
+    button{
+        background-color: $background-color;
+        padding: 0 10px;
+    }
+ }
+
+ .btn-left{
+    color: #F6EFD8;
+    position: absolute;
+    left: 0;
+
+    svg {
+      transition: transform 0.25s ease;
+    }
+
+    &:hover svg {
+      transform: rotate(90deg);
+    }
+ }
+
+ .btn-right{
+    position: absolute;
+    right: 0;
+ }
+
+ .user-grid{
+    border: 3px solid $background-color;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 10px 5px 15px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+ }
+
+ 
+.modal-dialog{
+  padding: 20px;
+
+  button{
+    border-radius: 5px;
+    background-color: $background-color;
+    color: #fff;
+    margin: 0 1.5px;
+  }
+}
+
+.dialog-header{
+  border-bottom: 3px solid $background-color;
+
+  .close-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: $background-color;
+    color: #fff;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    line-height: 1;
+    transition: 0.2s;
+  }
+
+  .close-btn:hover { background: #a11; }
+}

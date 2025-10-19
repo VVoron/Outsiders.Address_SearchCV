@@ -1,21 +1,21 @@
 <div class="page-view">
     <div class="modal-header">
-    <div class="left-head">
-        <h3>Загрузка фотографий</h3>
-        <div class="info-icon" tabindex="0">
-            ℹ
-            <div class="info-tooltip">
-                Заполните координаты или адрес фото, высоту и угол съёмки.<br>
-                Если информации нет — модель определит координаты автоматически.<br>
-                Угол по умолчанию: <b>0°</b>, высота: <b>1.5 м</b>.
+        <div class="left-head">
+            <h3>Загрузка фотографий</h3>
+            <div class="info-icon" tabindex="0">
+                ℹ
+                <div class="info-tooltip">
+                    Заполните координаты или адрес фото, высоту и угол съёмки.<br>
+                    Если информации нет — модель определит координаты автоматически.<br>
+                    Угол по умолчанию: <b>0°</b>, высота: <b>1.5 м</b>.
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="header-buttons">
-        <button class="add-btn" (click)="openFileDialog()">+</button>
-        <button class="close-btn" (click)="close()">×</button>
-    </div>
+        <div class="header-buttons">
+            <button class="add-btn" (click)="openFileDialog()">+</button>
+            <button class="close-btn" (click)="close()">×</button>
+        </div>
     </div>
 
     <input type="file" #fileInput (change)="onMoreFilesSelected($event)" multiple accept="image/*" hidden>
@@ -36,12 +36,12 @@
                     <div class="meta">
                         <input placeholder="Адрес" [(ngModel)]="p.meta.address" />
                         <div class="row">
-                        <input placeholder="Долгота" [(ngModel)]="p.meta.lon" />
-                        <input placeholder="Широта" [(ngModel)]="p.meta.lat" />
+                            <input placeholder="Широта" [(ngModel)]="p.meta.lat" />
+                            <input placeholder="Долгота" [(ngModel)]="p.meta.lon" />
                         </div>
                         <div class="row">
-                        <input placeholder="Высота" [(ngModel)]="p.meta.height" />
-                        <input placeholder="Угол" [(ngModel)]="p.meta.angle" />
+                            <input placeholder="Высота" [(ngModel)]="p.meta.height" />
+                            <input placeholder="Угол" [(ngModel)]="p.meta.angle" />
                         </div>
                     </div>
                 </div>

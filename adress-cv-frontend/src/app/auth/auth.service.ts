@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
-import { LoginRequest, RegisterRequest, TokenResponse, MeResponse } from './auth.models';
+import { LoginRequest, RegisterRequest, TokenResponse, ApiUserResponse } from './auth.models';
 import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { TokenStorageService } from './token-storage.service';
@@ -9,6 +9,8 @@ import { TokenStorageService } from './token-storage.service';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly base = `${environment.API_BASE}/auth`;
+
+  public userName = '';
 
   constructor(
     private http: HttpClient,
@@ -18,7 +20,9 @@ export class AuthService {
   login(dto: LoginRequest): Observable<void> {
     return this.http.post<TokenResponse>(`${this.base}/jwt/create/`, dto).pipe(
       tap(res => this.storage.setTokens(res.access, res.refresh)),
-      map(() => void 0)
+      map(() => {
+        this.userName = dto.username;
+      })
     );
   }
 
@@ -36,8 +40,8 @@ export class AuthService {
     );
   }
 
-  me(): Observable<MeResponse> {
-    return this.http.get<MeResponse>(`${this.base}/users/me/`);
+  me(): Observable<ApiUserResponse> {
+    return this.http.get<ApiUserResponse>(`${this.base}/me/`);
   }
 
   logout() {

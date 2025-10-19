@@ -1,1 +1,38 @@
-<app-user-grid [data]="(filteredData$ | async) ?? []"></app-user-grid>
+<div class="grid-btns">
+    <button class="icon-btn btn-left" (click)="onRefreshClick()">
+        <svg width="43" height="38" viewBox="0 0 43 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.25169 24.6493C6.92697 30.4468 13.5776 34.5543 21.3581 34.5543C31.4968 34.5543 39.7162 27.5834 39.7162 18.9848M38.4646 13.3204C35.7926 7.52149 29.1403 3.4154 21.3581 3.4154C11.2194 3.4154 3 10.3863 3 18.9848M16.3514 24.6465H3V35.9697M39.7162 2V13.3232H26.3649" stroke="currentColor" stroke-opacity="0.75" stroke-width="5"/>
+        </svg>
+    </button>
+
+    <button class="icon-btn btn-right" (click)="openDeleteDialog()">
+      <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6.5625 35C5.35938 35 4.32979 34.6195 3.47375 33.8586C2.61771 33.0977 2.18896 32.1818 2.1875 31.1111V5.83333H0V1.94444H10.9375V0H24.0625V1.94444H35V5.83333H32.8125V31.1111C32.8125 32.1805 32.3845 33.0964 31.5284 33.8586C30.6724 34.6208 29.6421 35.0013 28.4375 35H6.5625ZM28.4375 5.83333H6.5625V31.1111H28.4375V5.83333ZM10.9375 27.2222H15.3125V9.72222H10.9375V27.2222ZM19.6875 27.2222H24.0625V9.72222H19.6875V27.2222Z" fill="white" fill-opacity="0.59"/>
+      </svg>
+    </button>
+</div>
+
+<div class="user-grid">
+    <app-user-grid #grid [data]="(filteredData$ | async) ?? []"></app-user-grid>
+</div>
+
+
+<ng-template #deleteDialog let-dialogRef="dialogRef">
+  <div class="modal-dialog">
+    <div class="dialog-header">
+      <h2 mat-dialog-title>Удаление пользователей</h2>
+      <button class="close-btn" (click)="dialogRef.close()">×</button>
+    </div>
+
+    <mat-dialog-content>
+      <p>
+        Вы уверены, что хотите удалить выбранных пользователей?
+      </p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions [align]="'center'">
+      <button mat-flat-button (click)="dialogRef.close('delete')">Удалить</button>
+      <button mat-button (click)="dialogRef.close()">Отмена</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

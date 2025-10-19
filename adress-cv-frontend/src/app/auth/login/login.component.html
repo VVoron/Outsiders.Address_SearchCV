@@ -4,7 +4,7 @@
 
     <form (ngSubmit)="submit()" [formGroup]="form" novalidate>
       <label>
-        <div style="margin-left: 43px; color: rgba(79, 81, 83, 1);">Введите логин</div>
+        <div style="margin-left: 24px; color: rgba(79, 81, 83, 1);">Введите логин</div>
         <input type="text" formControlName="username" placeholder="Логин пользователя" class="" />
       </label>
       <div class="err" *ngIf="form.controls.username.touched && form.controls.username.invalid">
@@ -12,12 +12,12 @@
       </div>
 
       <label>
-        <div style="margin-left: 43px; color: rgba(79, 81, 83, 1)">Введите пароль</div>
+        <div style="margin-left: 24px; color: rgba(79, 81, 83, 1)">Введите пароль</div>
         
         <input type="password" formControlName="password" placeholder="********************" />
       </label>
       <div class="err" *ngIf="form.controls.password.touched && form.controls.password.invalid">
-        Минимум 6 символов
+        * Минимум 6 символов
       </div>
 
       <div class="server-err" *ngIf="serverError">* {{ serverError }}</div>
