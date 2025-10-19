@@ -12,13 +12,6 @@ import {
   AddressShortDto
 } from '../data-models/addressDto';
 
-export interface ApiTrashPoint {
-  id: number;
-  image: ImageDTO;
-  lat: number;
-  lon: number;
-}
-
 @Injectable({ providedIn: 'root' })
 export class ImageLocationsService {
   constructor(private http: HttpClient) {}
@@ -131,7 +124,7 @@ export class ImageLocationsService {
   }
 
 
-  getTrashByCoordinates(lat: number, lon: number, radiusKm: number): Observable<ApiTrashPoint[]> {
+  getTrashByCoordinates(lat: number, lon: number, radiusKm: number): Observable<AddressShortDto[]> {
     const url = `${environment.API_BASE}/map/trash-images-by-coordinates/`;
     const params = new HttpParams()
       .set('lat', String(lat))
@@ -139,7 +132,7 @@ export class ImageLocationsService {
       .set('radius_km', String(radiusKm));
 
     return this.http
-      .get<{ data: ApiTrashPoint[] }>(url, { params })
-      .pipe(map(res => res?.data ?? []));
+      .get<{ data: ApiTrashImageLocation[] }>(url, { params })
+      .pipe(map(res => res.data.map(this.mapOneShort) ?? []));
   }
 }

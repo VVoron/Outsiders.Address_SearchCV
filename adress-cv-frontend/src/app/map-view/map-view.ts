@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import maplibregl, { Map, Marker, LngLatLike, LngLatBoundsLike } from 'maplibre-gl';
@@ -36,7 +36,6 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() styleUrl = DEFAULTS.STYLE_URL;
   @Input() addresses: AddressShortDto[] = []; 
-  @Input() points: { lat: number; lon: number }[] = [];
   @Input() zoom = 14;
   @Input() height = '100%';
   @Input() minHeight = '320px';
@@ -68,7 +67,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   private readonly circleFillId = 'user-circle-fill';
   private readonly circleStrokeId = 'user-circle-stroke';
 
-  constructor(private imageSvc: ImageLocationsService) {}
+  constructor(private imageSvc: ImageLocationsService, private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -84,19 +83,16 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   get inputPoints(){
-    if (this.addresses.length > 0){
-      const pts: { lat: number; lon: number }[] = [];
-      for (const t of this.addresses) {
-        const lat = typeof t.lat === 'number' ? t.lat : Number.NaN;
-        const lon = typeof t.lon === 'number' ? t.lon : Number.NaN;
-        if (Number.isFinite(lat) && Number.isFinite(lon)) {
-          pts.push({ lat, lon });
-        }
+    const pts: { lat: number; lon: number }[] = [];
+    for (const t of this.addresses) {
+      const lat = typeof t.lat === 'number' ? t.lat : Number.NaN;
+      const lon = typeof t.lon === 'number' ? t.lon : Number.NaN;
+      if (Number.isFinite(lat) && Number.isFinite(lon)) {
+        pts.push({ lat, lon });
       }
-
-      return pts
     }
-    return this.points;
+
+    return pts
   }
 
   private resolvePublicUrl(rel: string): string {
@@ -155,7 +151,11 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
 
         this.imageSvc.getTrashByCoordinates(lat, lon, 1).subscribe({
-          next: (items) => this.renderSearchMarkers(items),
+          next: (items) => { 
+            this.addresses = items;
+            this.cdr.detectChanges();
+            this.renderSearchMarkers(this.inputPoints);
+          },
           error: () => this.renderSearchMarkers([]),
         });
 
@@ -281,7 +281,11 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.updateCircle(nLat, nLon, 1);
 
     this.imageSvc.getTrashByCoordinates(nLat, nLon, 1).subscribe({
-      next: (items) => this.renderSearchMarkers(items),
+      next: (items) => {
+        this.addresses = items;
+        this.cdr.detectChanges();
+        this.renderSearchMarkers(this.inputPoints)
+      },
       error: () => this.renderSearchMarkers([]),
     });
 
@@ -290,7 +294,6 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.pointChange.emit({ lat: nLat, lon: nLon });
   }
 
-  /** Создаёт/перемещает единственный активный маркер */
   private updateActiveMarker(lat: number, lon: number, animate = false): void {
     if (!this.map) return;
 

@@ -19,6 +19,8 @@
     </div>
   }
   
+@if(addresses.length > 0){
+
   <div class="image-info">
     <ul>
       @for (address of addresses; track $index) {
@@ -35,5 +37,6 @@
       }
     </ul>
   </div>
+}
 
 </div>
