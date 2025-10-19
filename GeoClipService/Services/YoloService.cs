@@ -76,12 +76,21 @@ public class YoloRunner : IDisposable
     private readonly string[] classNames;
     private const int InputSize = 640;
 
-    private static readonly Font LabelFont = SystemFonts.CreateFont("Arial", 18, FontStyle.Bold);
+    private static readonly Font LabelFont = TryLoadFont();
 
     public YoloRunner(string modelPath, string[] classNames)
     {
         this.classNames = classNames;
         session = new InferenceSession(modelPath);
+    }
+    
+    private static Font TryLoadFont()
+    {
+        try { return SystemFonts.CreateFont("Arial", 18, FontStyle.Bold); } catch {}
+        try { return SystemFonts.CreateFont("DejaVu Sans", 18, FontStyle.Bold); } catch {}
+        try { return SystemFonts.CreateFont("Liberation Sans", 18, FontStyle.Bold); } catch {}
+        var any = SystemFonts.Families.First().CreateFont(18, FontStyle.Bold);
+        return any;
     }
 
     public (IReadOnlyList<Image<Rgba32>> images, bool foundTrash, List<Detection> detections) Predict(

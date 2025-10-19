@@ -1,4 +1,11 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+
+USER root
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends fonts-dejavu-core fontconfig \
+ && rm -rf /var/lib/apt/lists/* \
+ && fc-cache -f
+
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
