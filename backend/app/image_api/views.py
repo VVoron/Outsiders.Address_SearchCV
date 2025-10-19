@@ -2,7 +2,7 @@ import uuid
 import logging
 
 from django.utils.dateparse import parse_date
-from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
+from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema, OpenApiParameter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -563,8 +563,6 @@ class DeleteUserImageLocationView(APIView):
         return Response({"message": f"ImageLocation {pk} deleted"}, status=status.HTTP_200_OK)
 
 
-# --- GetUserDetectedLocation ---
-# Схема ответа для одного элемента results
 detected_location_item_schema = {
     "type": "object",
     "properties": {
@@ -589,14 +587,11 @@ detected_location_item_schema = {
     }
 }
 
-# Схема ответа с пагинацией
+# Схема ответа с оберткой "data"
 get_user_detected_locations_response_schema = {
     "type": "object",
     "properties": {
-        'count': {"type": "integer", "example": 50},
-        'next': {"type": "string", "format": "uri", "nullable": True, "example": 'http://api.example.org/accounts/?page=2'},
-        'previous': {"type": "string", "format": "uri", "nullable": True, "example": 'http://api.example.org/accounts/?page=1'},
-        'results': {
+        'data': {
             "type": "array",
             "items": detected_location_item_schema
         }
@@ -604,6 +599,22 @@ get_user_detected_locations_response_schema = {
 }
 
 @extend_schema(
+    parameters=[ # Документация для query параметров
+        OpenApiParameter(
+            name="latitude",
+            type=float,
+            location=OpenApiParameter.QUERY,
+            required=False,
+            description="Широта центральной точки для фильтрации по радиусу"
+        ),
+        OpenApiParameter(
+            name="longitude",
+            type=float,
+            location=OpenApiParameter.QUERY,
+            required=False,
+            description="Долгота центральной точки для фильтрации по радиусу"
+        ),
+    ],
     request=None, # GET-запрос не имеет тела
     responses={
         200: OpenApiResponse(
@@ -619,11 +630,24 @@ get_user_detected_locations_response_schema = {
         OpenApiExample(
             name="Успешный ответ",
             value={
-                "count": 1,
-                "next": None,
-                "previous": None,
-                "results": [
-                    detected_location_item_schema # example value
+                "data": [ # Используем "data", как в схеме и в ответе view
+                    {
+                        "id": 1,
+                        "file": {
+                            "id": 1,
+                            "filename": "trash_image.jpg",
+                            "original_filename": "original_trash.jpg",
+                            "file_path": "/path/to/trash_image.jpg",
+                            "s3_url": "http://s3.example.com/trash_image.jpg",
+                            "preview_url": "http://example.com/preview.jpg",
+                            "uploaded_at": "2023-10-20T10:00:00Z",
+                        },
+                        "image_location_id": 123,
+                        "lat": 55.7568,
+                        "lon": 37.6183,
+                        "created_at": "2023-10-20T11:00:00Z",
+                        "address": "ул. Ленина, д. 15, г. Москва"
+                    }
                 ]
             },
             response_only=True,
@@ -639,9 +663,8 @@ get_user_detected_locations_response_schema = {
     summary="Получить список обнаруженных локаций мусора пользователя",
     description="Возвращает список обнаруженных локаций мусора (DetectedImageLocation), "
                 "связанных с изображениями, загруженными аутентифицированным пользователем. "
-                "Поддерживает фильтрацию по радиусу от заданной точки и пагинацию результатов.",
-    # Документация для query параметров не включена в extend_schema напрямую
-    # Она будет автоматически сгенерирована из фильтров, если они настроены
+                "Поддерживает фильтрацию по радиусу от заданной точки. "
+                "Ответ оборачивается в ключ 'data'.",
 )
 class GetUserDetectedLocation(APIView):
     permission_classes = [IsAuthenticated]
@@ -666,3 +689,73 @@ class GetUserDetectedLocation(APIView):
 
         # оборачиваем под ключ "data"
         return Response({"data": response_data}, status=status.HTTP_200_OK)
+    
+
+@extend_schema(
+    request=None,  # POST-запрос не требует тела, только pk в URL
+    responses={
+        200: OpenApiResponse(
+            description="Задача на повторную обработку успешно отправлена",
+            response={
+                "type": "object",
+                "properties": {
+                    "message": {"type": "string", "example": "ImageLocation 42 retried"}
+                }
+            }
+        ),
+        401: OpenApiResponse(
+            description="Требуется аутентификация",
+            response={"type": "object", "properties": {"error": {"type": "string"}}}
+        ),
+        404: OpenApiResponse(
+            description="ImageLocation не найден у текущего пользователя",
+            response={"type": "object", "properties": {"error": {"type": "string"}}}
+        ),
+    },
+    examples=[
+        OpenApiExample(
+            name="Успешный ответ",
+            value={"message": "ImageLocation 42 retried"},
+            response_only=True,
+            status_codes=["200"]
+        ),
+        OpenApiExample(
+            name="Ошибка 401",
+            value={"error": "Authentication required"},
+            response_only=True,
+            status_codes=["401"]
+        ),
+        OpenApiExample(
+            name="Ошибка 404",
+            value={"error": "ImageLocation not found"},
+            response_only=True,
+            status_codes=["404"]
+        ),
+    ],
+    summary="Повторная обработка ImageLocation",
+    description=(
+        "Позволяет пользователю повторно отправить на обработку конкретный объект `ImageLocation`. "
+        "Перед повторной отправкой все связанные `DetectedImageLocation` удаляются, "
+        "а статус `ImageLocation` переводится в `processing` (ожидает). "
+        "После этого задача снова ставится в очередь Celery."
+    ),
+)
+class RetryUserImageLocationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk, *args, **kwargs):
+        user = request.user
+
+        try:
+            # Ищем объект только у текущего пользователя
+            image_location = ImageLocation.objects.get(id=pk, user=user)
+        except ImageLocation.DoesNotExist:
+            return Response(
+                {"error": "ImageLocation not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        service = ImageUploadService(request.user)
+        service.retry_result(image_location)
+
+        return Response({"message": f"ImageLocation {pk} retried"}, status=status.HTTP_200_OK)
