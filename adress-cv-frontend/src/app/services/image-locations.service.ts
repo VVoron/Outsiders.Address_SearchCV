@@ -12,6 +12,13 @@ import {
   AddressShortDto
 } from '../data-models/addressDto';
 
+export interface ApiTrashPoint {
+  id: number;
+  image: ImageDTO;
+  lat: number;
+  lon: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ImageLocationsService {
   constructor(private http: HttpClient) {}
@@ -123,4 +130,16 @@ export class ImageLocationsService {
     return this.http.post<any>(`${environment.API_BASE}/upload-archive/`, fd);
   }
 
+
+  getTrashByCoordinates(lat: number, lon: number, radiusKm: number): Observable<ApiTrashPoint[]> {
+    const url = `${environment.API_BASE}/map/trash-images-by-coordinates/`;
+    const params = new HttpParams()
+      .set('lat', String(lat))
+      .set('lon', String(lon))
+      .set('radius_km', String(radiusKm));
+
+    return this.http
+      .get<{ data: ApiTrashPoint[] }>(url, { params })
+      .pipe(map(res => res?.data ?? []));
+  }
 }

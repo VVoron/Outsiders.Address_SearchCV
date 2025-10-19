@@ -135,6 +135,6 @@ public class IncomingJobService(PredictService svc, IBackgroundJobClient jobs, S
     private static string BuildResultKeyPerDetection(string sourceKey, string taskId, int index)
     {
         var name = Path.GetFileNameWithoutExtension(sourceKey);
-        return $"results/{name}_{taskId}_det{index}.jpg";
+        return $"{name}_{taskId}_det{index}.jpg";
     }
 }

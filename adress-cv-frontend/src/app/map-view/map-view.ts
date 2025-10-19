@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import maplibregl, { Map, Marker, LngLatLike, LngLatBoundsLike } from 'maplibre-gl';
 import { AddressShortDto } from '../data-models/addressDto';
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson';
+import { ImageLocationsService } from '../services/image-locations.service';
 
 const DEFAULTS = {
   lat: 55.74724,
@@ -16,6 +17,12 @@ function parseCoord(v: string | number): number {
   if (typeof v === 'number') return v;
   return parseFloat(String(v).trim().replace(',', '.'));
 }
+
+const MARKER_SIZES = {
+  active: 48,
+  trash:  40,
+} as const;
+
 
 @Component({
   selector: 'app-map-view',
@@ -39,6 +46,8 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() autoFit = true;
   @Input() fitPadding = 40;
 
+  private searchMarkers: Marker[] = [];
+
   @Output() pointChange = new EventEmitter<{ lat: number; lon: number }>();
   @Output() mapReady = new EventEmitter<maplibregl.Map>();
 
@@ -58,6 +67,8 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   private readonly circleSourceId = 'user-circle-src';
   private readonly circleFillId = 'user-circle-fill';
   private readonly circleStrokeId = 'user-circle-stroke';
+
+  constructor(private imageSvc: ImageLocationsService) {}
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -88,6 +99,31 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     return this.points;
   }
 
+  private resolvePublicUrl(rel: string): string {
+    return new URL(rel.replace(/^\/+/, ''), document.baseURI).toString();
+  }
+
+  private makeImgMarkerEl(src: string, size = 30, title?: string): HTMLElement {
+    const wrap = document.createElement('div');
+    wrap.className = 'img-marker';
+    wrap.style.width = `${size}px`;
+    wrap.style.height = `${size}px`;
+    wrap.style.lineHeight = '0';
+
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = title ?? '';
+    img.width = size;
+    img.height = size;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.display = 'block';
+    img.draggable = false;
+
+    wrap.appendChild(img);
+    return wrap;
+  }
+
   private initMap(): void {
     const center: LngLatLike = [
       this.inputPoints[0]?.lon ?? DEFAULTS.lon,
@@ -113,8 +149,16 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
         const lon = Number(e.lngLat.lng.toFixed(12));
         this.latStr = lat.toString();
         this.lonStr = lon.toString();
+
         this.updateActiveMarker(lat, lon, true);
         this.updateCircle(lat, lon, 1);
+
+
+        this.imageSvc.getTrashByCoordinates(lat, lon, 1).subscribe({
+          next: (items) => this.renderSearchMarkers(items),
+          error: () => this.renderSearchMarkers([]),
+        });
+
         this.pointChange.emit({ lat, lon });
       });
     }
@@ -131,19 +175,67 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     });
   }
 
+  private renderSearchMarkers(points: { lat: number; lon: number }[]): void {
+    if (!this.map) return;
+
+    this.searchMarkers.forEach(m => m.remove());
+    this.searchMarkers = [];
+
+    for (const p of points) {
+      const el = this.makeImgMarkerEl(
+        this.resolvePublicUrl('search_marker.svg'),
+        MARKER_SIZES.trash,
+        'Точка мусора'
+      );
+
+      const m = new maplibregl.Marker({
+          element: el,
+          draggable: false,
+          anchor: 'bottom',
+        })
+        .setLngLat([p.lon, p.lat])
+        .addTo(this.map!);
+
+      this.searchMarkers.push(m);
+    }
+  }
+
   private addStaticMarkers() {
     if (!this.map) return;
 
     for (const p of this.inputPoints) {
+      const el = this.makeImgMarkerEl(
+        this.resolvePublicUrl('search_marker.svg'),
+        MARKER_SIZES.trash,
+        'Точка мусора'
+      );
+
       const m = new maplibregl.Marker({
-        draggable: false,
-        color: '#ef4444',
-      })
+          element: el,
+          draggable: false,
+          anchor: 'bottom',
+        })
         .setLngLat([p.lon, p.lat])
         .addTo(this.map!);
 
       this.staticMarkers.push(m);
     }
+  }
+
+  private makePinEl(color = '#ef4444', size = 28, title?: string): HTMLElement {
+    const el = document.createElement('div');
+    el.className = 'svg-marker';
+    el.style.width = `${size}px`;
+    el.style.height = `${size}px`;
+    el.innerHTML = `
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="svg-marker__svg" ${title ? `role="img"` : ''}>
+        ${title ? `<title>${title}</title>` : ''}
+        <!-- классический "пин" -->
+        <path fill="${color}" stroke="#ffffff" stroke-width="1.5"
+          d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5
+            2.5 2.5 0 0 1 0 5z"/>
+      </svg>`;
+    return el;
   }
 
   private makeTrashMarkerEl(): HTMLElement {
@@ -186,7 +278,13 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     const nLon = +lon.toFixed(12);
 
     this.updateActiveMarker(nLat, nLon, true);
-    this.updateCircle(nLat, nLon, 1); 
+    this.updateCircle(nLat, nLon, 1);
+
+    this.imageSvc.getTrashByCoordinates(nLat, nLon, 1).subscribe({
+      next: (items) => this.renderSearchMarkers(items),
+      error: () => this.renderSearchMarkers([]),
+    });
+
     this.latStr = nLat.toFixed(12);
     this.lonStr = nLon.toFixed(12);
     this.pointChange.emit({ lat: nLat, lon: nLon });
@@ -201,15 +299,23 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.activeMarker = undefined;
     }
 
-    this.activeMarker = new maplibregl.Marker({ draggable: false })
-      .setLngLat([lon, lat])
-      .addTo(this.map);
+    const el = this.makeImgMarkerEl(
+      this.resolvePublicUrl('red_marker.svg'),
+      MARKER_SIZES.active,
+      'Выбранная точка'
+    );
 
-    if (animate) {
-      this.map.easeTo({ center: [lon, lat], duration: 600 });
-    } else {
-      this.map.setCenter([lon, lat]);
-    }
+    this.activeMarker = new maplibregl.Marker({
+        element: el,
+        draggable: false,
+        anchor: 'bottom',
+        // offset: [0, -2],
+      })
+      .setLngLat([lon, lat])
+      .addTo(this.map!);
+
+    if (animate) this.map.easeTo({ center: [lon, lat], duration: 600 });
+    else this.map.setCenter([lon, lat]);
   }
 
   /** Рисует/обновляет круг заданного радиуса (км) вокруг активной точки */
