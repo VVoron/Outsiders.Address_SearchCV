@@ -182,27 +182,6 @@ export class ImageListComponent {
     this.filteredData$.next(result);
   }
 
-  get selectedPoints(): { lat: number; lon: number }[] {
-    const pts: { lat: number; lon: number }[] = [];
-
-    for (const s of this.selected) {
-      const items = s.trash_images ?? [];
-      for (const t of items) {
-        const lat = typeof t.lan === 'number' ? t.lan : Number.NaN;
-        const lon = typeof t.lot === 'number' ? t.lot : Number.NaN;
-        if (Number.isFinite(lat) && Number.isFinite(lon)) {
-          pts.push({ lat, lon });
-        }
-      }
-    }
-
-    const uniq = new Map<string, { lat: number; lon: number }>();
-    for (const p of pts) uniq.set(`${p.lat.toFixed(6)}:${p.lon.toFixed(6)}`, p);
-
-    const result = Array.from(uniq.values());
-    return result.length ? result : this.selected.map(s => ({ lat: s.lat, lon: s.lon }));
-  }
-
   onGridSelection(sel: AddressDto[]) {
     this.selected = sel;
   }
@@ -313,5 +292,9 @@ export class ImageListComponent {
     dialogRef.afterClosed().subscribe((result: 'delete') => {
       if (result === 'delete') this.remove();
     });
+  }
+
+  get trashImages(){
+    return this.selected.flatMap(x => x.trashImages);
   }
 }

@@ -19,4 +19,21 @@
     </div>
   }
   
+  <div class="image-info">
+    <ul>
+      @for (address of addresses; track $index) {
+        <li>
+          <div>
+            <span [title]="address.address">{{address.address}}</span>
+            <span class="coordinates">{{address.lat | number:'1.5-5'}} с.ш. {{address.lon | number:'1.5-5'}} в.д.</span>
+          </div>
+          <img
+            [src]="address.photoUrl || 'assets/default-image.png'"
+            alt="Фото"
+          />
+        </li>
+      }
+    </ul>
+  </div>
+
 </div>

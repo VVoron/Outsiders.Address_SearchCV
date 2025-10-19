@@ -7,7 +7,9 @@ import {
   ApiImageLocationsResponse,
   ApiImageLocation,
   UploadImageItem,
-  ImageDTO
+  ImageDTO,
+  ApiTrashImageLocation,
+  AddressShortDto
 } from '../data-models/addressDto';
 
 @Injectable({ providedIn: 'root' })
@@ -78,7 +80,17 @@ export class ImageLocationsService {
       imageFilename: mainImg?.filename,
 
       trashCount: x.trash_images?.length,
-      trash_images: x.trash_images,
+      trashImages: x.trash_images.map(this.mapOneShort),
+    };
+  };
+
+  private mapOneShort = (x: ApiTrashImageLocation): AddressShortDto => {
+    return {
+      id: x.id,
+      photoUrl: x.image?.preview_url || x.image?.file_path || '',
+      address: x.address || '—',
+      lat: x.lat ?? 0,
+      lon: x.lon ?? 0,
     };
   };
 

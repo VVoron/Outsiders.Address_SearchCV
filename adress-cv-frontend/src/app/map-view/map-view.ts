@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, O
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import maplibregl, { Map, Marker, LngLatLike, LngLatBoundsLike } from 'maplibre-gl';
+import { AddressShortDto } from '../data-models/addressDto';
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson';
 
 const DEFAULTS = {
@@ -27,6 +28,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('mapEl', { static: true }) mapEl!: ElementRef<HTMLDivElement>;
 
   @Input() styleUrl = DEFAULTS.STYLE_URL;
+  @Input() addresses: AddressShortDto[] = []; 
   @Input() points: { lat: number; lon: number }[] = [];
   @Input() zoom = 14;
   @Input() height = '100%';
@@ -66,14 +68,30 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.staticMarkers.forEach(m => m.remove());
       this.staticMarkers = [];
       this.addStaticMarkers();
-      this.fitToPoints(this.points);
+      this.fitToPoints(this.inputPoints);
     }
+  }
+
+  get inputPoints(){
+    if (this.addresses.length > 0){
+      const pts: { lat: number; lon: number }[] = [];
+      for (const t of this.addresses) {
+        const lat = typeof t.lat === 'number' ? t.lat : Number.NaN;
+        const lon = typeof t.lon === 'number' ? t.lon : Number.NaN;
+        if (Number.isFinite(lat) && Number.isFinite(lon)) {
+          pts.push({ lat, lon });
+        }
+      }
+
+      return pts
+    }
+    return this.points;
   }
 
   private initMap(): void {
     const center: LngLatLike = [
-      this.points[0]?.lon ?? DEFAULTS.lon,
-      this.points[0]?.lat ?? DEFAULTS.lat,
+      this.inputPoints[0]?.lon ?? DEFAULTS.lon,
+      this.inputPoints[0]?.lat ?? DEFAULTS.lat,
     ];
 
     this.map = new maplibregl.Map({
@@ -102,8 +120,8 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     this.map.once('load', () => {
-      if (this.points.length) {
-        this.fitToPoints(this.points);
+      if (this.inputPoints.length) {
+        this.fitToPoints(this.inputPoints);
       } else {
         const c = this.map!.getCenter();
         this.latStr = c.lat.toFixed(12);
@@ -116,7 +134,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   private addStaticMarkers() {
     if (!this.map) return;
 
-    for (const p of this.points) {
+    for (const p of this.inputPoints) {
       const m = new maplibregl.Marker({
         draggable: false,
         color: '#ef4444',

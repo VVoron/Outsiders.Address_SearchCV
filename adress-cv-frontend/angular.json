@@ -26,6 +26,18 @@
                 "input": "public"
               }
             ],
+            "budgets": [
+              {
+                "type": "initial",
+                "maximumWarning": "15mb",
+                "maximumError": "26mb"
+              },
+              {
+                "type": "anyComponentStyle",
+                "maximumWarning": "500kb",
+                "maximumError": "1mb"
+              }
+            ],
             "styles": [
               "node_modules/@progress/kendo-theme-default/dist/all.css",
               "node_modules/@progress/kendo-font-icons/dist/index.css",

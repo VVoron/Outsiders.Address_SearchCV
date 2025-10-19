@@ -13,14 +13,15 @@ export interface AddressDto {
   imageId?: number;
   imageFilename?: string;
   trashCount?: number;
-  trash_images: {
-    id: number;
-    filename: string;
-    file_path: string;
-    preview_url?: string;
-    lan?: number;
-    lot?: number;
-  }[];
+  trashImages: AddressShortDto[];
+}
+
+export interface AddressShortDto{
+  id: number;
+  address: string;
+  photoUrl: string;
+  lat?: number;
+  lon?: number;
 }
 
 export interface ApiImageLocation {
@@ -45,14 +46,22 @@ export interface ApiImageLocation {
     file_path: string;
     preview_url?: string;
   };
-  trash_images: {
+  trash_images: ApiTrashImageLocation[];
+}
+
+
+export interface ApiTrashImageLocation{
+  id: number;
+  lat: number;
+  lon: number;
+  address: string;
+  image: {
     id: number;
     filename: string;
     file_path: string;
     preview_url?: string;
-  }[];
+  };
 }
-
 
 export interface ApiImageLocationsResponse {
   meta: {
