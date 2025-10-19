@@ -24,6 +24,10 @@ export class NavMenu implements OnInit {
     });
   }
 
+  get currentUserName(){
+    return this.auth.userName ?? this.userName;
+  }
+
   onLogout(event: Event) {
     event.preventDefault();
     this.auth.logout();

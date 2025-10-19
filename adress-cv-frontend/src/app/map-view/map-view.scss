@@ -100,8 +100,9 @@ button.go {
   color: #fff;
   position: absolute;
   background-color: #1B1C1CCC;
-  width: 460px;
+  width: 470px;
   max-height: 400px;
+  overflow-y: auto;
   border-radius: 24px;
 
   li{
