@@ -11,6 +11,7 @@ import { MapViewComponent } from "../map-view/map-view";
 import { PhotoManagerComponent } from "./photo-manager/photo-manager.component";
 import { MatDialog, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
+import JSZip from 'jszip';
 
 
 @Component({
@@ -192,6 +193,92 @@ export class ImageListComponent {
 
   openPhotoDialog(){
     this.fileInput.nativeElement.click();
+  }
+
+  async exportPhotos(): Promise<void> {
+    // берём выбранные, иначе все отфильтрованные, иначе все строки
+    const pool = this.selected.length
+      ? this.selected
+      : (this.filteredData$.value?.length ? this.filteredData$.value : this.rows);
+
+    if (!pool.length) {
+      alert('Нет данных для выгрузки');
+      return;
+    }
+
+    const zip = new JSZip();
+    const filenames = new Set<string>();
+
+    const makeName = (base: string, fallback: string) => {
+      const raw = (base || fallback || 'image').split('?')[0];
+      const name = raw.split('/').pop() || 'image';
+      // гарантируем уникальность имён
+      let final = name;
+      let i = 1;
+      while (filenames.has(final)) {
+        const dot = name.lastIndexOf('.');
+        final = dot > 0 ? `${name.slice(0, dot)}_${i}${name.slice(dot)}` : `${name}_${i}`;
+        i++;
+      }
+      filenames.add(final);
+      return final;
+    };
+
+    type Job = { url: string; name: string };
+    const jobs: Job[] = [];
+
+    for (const row of pool) {
+      // основное фото
+      if (row.photoUrl) {
+        jobs.push({
+          url: row.photoUrl,
+          name: makeName(row.imageFilename || '', `main_${row.id}.jpg`),
+        });
+      }
+      // мусорные фото
+      for (const t of (row.trashImages ?? [])) {
+        const url = t.photoUrl;
+        if (!url) continue;
+        const fallback = t.photoUrl || `trash_${row.id}_${t.id}.jpg`;
+        jobs.push({ url, name: makeName(t.photoUrl || url, fallback) });
+      }
+    }
+
+    if (!jobs.length) {
+      alert('Не найдено ни одной фотографии для выгрузки');
+      return;
+    }
+
+    // качаем с ограничением параллелизма (чтобы не DDoS-ить сервер)
+    const CONCURRENCY = 4;
+    const fetchAndAdd = async (job: Job) => {
+      try {
+        const res = await fetch(job.url, { mode: 'cors' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const ab = await (await res.blob()).arrayBuffer();
+        zip.file(job.name, ab);
+      } catch (e) {
+        console.error('Не удалось скачать', job.url, e);
+        // добавим в zip "плейсхолдер" со ссылкой, чтобы ничего не потерять
+        zip.file(job.name + '.txt', `Не удалось скачать файл.\nURL: ${job.url}\nОшибка: ${(e as Error).message}`);
+      }
+    };
+
+    for (let i = 0; i < jobs.length; i += CONCURRENCY) {
+      await Promise.all(jobs.slice(i, i + CONCURRENCY).map(fetchAndAdd));
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const ts = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const name = `photos_${ts.getFullYear()}${pad(ts.getMonth()+1)}${pad(ts.getDate())}_${pad(ts.getHours())}${pad(ts.getMinutes())}.zip`;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
   }
 
   onPhotoFilesSelected(event: Event) {

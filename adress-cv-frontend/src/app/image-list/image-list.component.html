@@ -109,8 +109,8 @@
     </button>
   </div>
 
-  <div class="right-menu" [class.active]="isRightMenuOpened">
-    <button class="icon-btn">
+  <div class="right-menu" [class.active]="isRightMenuOpened" >
+    <button class="icon-btn" (click)="exportPhotos()" [disabled]="selected.length === 0">
       <svg width="35" height="35" viewBox="0 0 35 35" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_299_896)">
         <path d="M31.36 17.64L17.5 31.5L3.64 17.64L6.125 15.1725L15.75 24.7975V0H19.25V24.7975L28.875 15.155L31.36 17.64ZM17.5 31.5H0V35H35V31.5H17.5Z" fill="currentColor"/>
