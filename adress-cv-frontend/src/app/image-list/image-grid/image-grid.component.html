@@ -39,7 +39,7 @@
   <kendo-grid-column field="trashCount" title="Нарушения" [width]="160">
     <ng-template kendoGridCellTemplate let-dataItem>
       <ng-container *ngIf="dataItem.trashCount > 0; else noIssues">
-        <a href="#">Просмотреть ({{ dataItem.trashCount }})</a>
+        Найдено нарушений: {{ dataItem.trashCount }}
       </ng-container>
       <ng-template #noIssues>Нарушений не найдено</ng-template>
     </ng-template>

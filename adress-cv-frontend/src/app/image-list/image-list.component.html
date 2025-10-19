@@ -168,16 +168,6 @@
 
     <mat-dialog-content style="max-height: fit-content">
       <div style="display: flex;flex-direction: row;">
-      <span style="margin-right: 32px;">
-        <ul class="list">
-          @for (item of selected; track item.id) {
-            <li style="padding: 8px; border: 1px solid black; border-radius: 8px;">
-              <div>№{{ item.id }}</div>
-              <div>{{ item.coordinates }}</div>
-            </li>
-          }
-        </ul>
-      </span>
       <app-map-view
         [height]="'100%'"
         [minHeight]="'640px'"

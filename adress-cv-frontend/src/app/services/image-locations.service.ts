@@ -58,22 +58,6 @@ export class ImageLocationsService {
   private mapOne = (x: ApiImageLocation): AddressDto => {
     const mainImg = x.main_image;
 
-    const trashCount = this.randInt(0, 5);
-    const trashImages = Array.from({ length: trashCount }, () => {
-      const lan = Number(this.rand(55.5536, 55.9536).toFixed(6));
-      const lot = Number(this.rand(37.421184, 37.821184).toFixed(6));
-      const id  = this.randInt(100000, 999999);
-
-      return {
-        id,
-        filename: this.RECOGNITION_IMG_URL,
-        file_path: this.RECOGNITION_IMG_URL,
-        preview_url: this.RECOGNITION_IMG_URL,
-        lan,
-        lot,
-      };
-    });
-
     const coords = x.main_coordinates
       ? `${this.fmtCoord(x.main_coordinates.lat, 12)} c.ш. ${this.fmtCoord(x.main_coordinates.lon, 12)} в.д.`
       : '—';
@@ -93,8 +77,8 @@ export class ImageLocationsService {
       imageId: mainImg?.id,
       imageFilename: mainImg?.filename,
 
-      trashCount: trashImages.length,
-      trash_images: trashImages,
+      trashCount: x.trash_images?.length,
+      trash_images: x.trash_images,
     };
   };
 
