@@ -13,6 +13,16 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.Configure<S3Options>(builder.Configuration.GetSection("S3"));
 builder.Services.Configure<YoloOptions>(builder.Configuration.GetSection("Yolo"));
+builder.Services.Configure<PredictOptions>(builder.Configuration.GetSection("Predict"));
+builder.Services.PostConfigure<PredictOptions>(opt =>
+{
+    if (!Path.IsPathRooted(opt.ModelPath))
+    {
+        var rooted = Path.Combine(builder.Environment.ContentRootPath, opt.ModelPath);
+        opt.ModelPath = rooted;
+    }
+});
+
 
 var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -47,9 +57,6 @@ builder.Services.AddHangfireServer(o =>
     o.WorkerCount = 2;
 });
 
-var modelPath = Path.Combine(builder.Environment.WebRootPath, "model_data", "geo_clip_model.onnx");
-var configPath = Path.Combine(builder.Environment.WebRootPath, "model_data", "processor_info.json");
-
 builder.Services.AddSingleton<IAmazonS3>(sp =>
 {
     var s3 = sp.GetRequiredService<IOptions<S3Options>>().Value;
@@ -67,7 +74,7 @@ builder.Services.AddSingleton<IAmazonS3>(sp =>
     return new AmazonS3Client(creds, s3Config);
 });
 
-builder.Services.AddSingleton<PredictService>(_ => new PredictService(modelPath, configPath));
+builder.Services.AddSingleton<PredictService>();
 builder.Services.AddSingleton<YoloService>();
 builder.Services.AddScoped<IncomingJobService>();
 builder.Services.AddScoped<CallbackService>();

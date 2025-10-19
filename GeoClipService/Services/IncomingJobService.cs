@@ -17,7 +17,7 @@ public class IncomingJobService(PredictService svc, IBackgroundJobClient jobs, S
 
             await using var seekable = await AsSeekableAsync(s3Obj.FileStream, preferMemory: true);
             seekable.Position = 0;
-            Console.WriteLine(dto.Lat.Value);
+
             if (!dto.Lat.HasValue || !dto.Lon.HasValue)
             {
                 var coords = await svc.PredictFromImage(seekable);
