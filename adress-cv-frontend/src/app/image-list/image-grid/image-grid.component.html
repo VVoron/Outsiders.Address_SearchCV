@@ -1,0 +1,62 @@
+<kendo-grid
+  [data]="gridData"
+  [pageable]="{ buttonCount: 5, info: true, pageSizes: [10, 20, 50], previousNext: true }"
+  [pageSize]="pageSize"
+  [skip]="skip"
+  (pageChange)="onPageChange($event)"
+  [selectable]="{ enabled: true, mode: 'multiple' }"
+  [resizable]="true"
+  [sortable]="true"
+  [kendoGridSelectBy]="selectBy"
+  [selectedKeys]="selectedKeys"
+  (selectionChange)="onSelectionChange($event)"
+  style="max-height: 550px; min-height: 550px;"
+>
+  <kendo-grid-checkbox-column [width]="60" [resizable]="false" [showSelectAll]="true">
+  </kendo-grid-checkbox-column>
+
+  <kendo-grid-column field="id" title="№" [width]="60"></kendo-grid-column>
+
+  <kendo-grid-column field="uploadDate" title="Дата загрузки" [width]="120">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      {{ dataItem.uploadDate | date: 'dd.MM.yyyy HH:mm' }}
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="photoUrl" title="Фото" [width]="100">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <img
+        [src]="dataItem.photoUrl || 'assets/default-image.png'"
+        alt="Фото"
+        style="width: 96px; height: 96px; object-fit: cover; border-radius: 8px;"
+      />
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="address" title="Адрес" [width]="300"></kendo-grid-column>
+  <kendo-grid-column field="coordinates" title="Координаты" [width]="150"></kendo-grid-column>
+
+  <kendo-grid-column field="trashCount" title="Нарушения" [width]="160">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <ng-container *ngIf="dataItem.trashCount > 0; else noIssues">
+        <a href="#">Просмотреть ({{ dataItem.trashCount }})</a>
+      </ng-container>
+      <ng-template #noIssues>Нарушений не найдено</ng-template>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="status" title="Статус" [width]="100"></kendo-grid-column>
+
+  <kendo-grid-messages
+    pagerItemsPerPage="Элементов на странице"
+    pagerItems="элементов"
+    pagerOf="из"
+    pagerPage="Страница"
+    pagerFirstPage="Первая страница"
+    pagerPreviousPage="Предыдущая"
+    pagerNextPage="Следующая"
+    pagerLastPage="Последняя"
+    pagerInputLabel="Номер страницы"
+  >
+  </kendo-grid-messages>
+</kendo-grid>

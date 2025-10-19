@@ -1,0 +1,62 @@
+<div class="page-view">
+    <div class="modal-header">
+    <div class="left-head">
+        <h3>Загрузка фотографий</h3>
+        <div class="info-icon" tabindex="0">
+            ℹ
+            <div class="info-tooltip">
+                Заполните координаты или адрес фото, высоту и угол съёмки.<br>
+                Если информации нет — модель определит координаты автоматически.<br>
+                Угол по умолчанию: <b>0°</b>, высота: <b>1.5 м</b>.
+            </div>
+        </div>
+    </div>
+
+    <div class="header-buttons">
+        <button class="add-btn" (click)="openFileDialog()">+</button>
+        <button class="close-btn" (click)="close()">×</button>
+    </div>
+    </div>
+
+    <input type="file" #fileInput (change)="onMoreFilesSelected($event)" multiple accept="image/*" hidden>
+
+    <div class="photos-grid">
+        @for (p of photos; track p; let i = $index) {
+            <div class="photo" (mouseenter)="p.hover = true" (mouseleave)="p.hover = false">
+            <img [src]="p.url" alt="photo" />
+
+            @if (p.hover) {
+                <div class="overlay">
+                    <button class="delete-btn" (click)="removePhoto(i)">
+                        <svg width="50" height="50" viewBox="0 0 35 35" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.5625 35C5.35938 35 4.32979 34.6195 3.47375 33.8586C2.61771 33.0977 2.18896 32.1818 2.1875 31.1111V5.83333H0V1.94444H10.9375V0H24.0625V1.94444H35V5.83333H32.8125V31.1111C32.8125 32.1805 32.3845 33.0964 31.5284 33.8586C30.6724 34.6208 29.6421 35.0013 28.4375 35H6.5625ZM28.4375 5.83333H6.5625V31.1111H28.4375V5.83333ZM10.9375 27.2222H15.3125V9.72222H10.9375V27.2222ZM19.6875 27.2222H24.0625V9.72222H19.6875V27.2222Z" fill="white"/>
+                        </svg>
+                    </button>
+
+                    <div class="meta">
+                        <input placeholder="Адрес" [(ngModel)]="p.meta.address" />
+                        <div class="row">
+                        <input placeholder="Долгота" [(ngModel)]="p.meta.lon" />
+                        <input placeholder="Широта" [(ngModel)]="p.meta.lat" />
+                        </div>
+                        <div class="row">
+                        <input placeholder="Высота" [(ngModel)]="p.meta.height" />
+                        <input placeholder="Угол" [(ngModel)]="p.meta.angle" />
+                        </div>
+                    </div>
+                </div>
+            }
+            </div>
+        }
+    </div>
+
+    <div class="submit-box">
+        <button
+            (click)="submitAll()" 
+            [disabled]="uploading"
+            [className]="uploading ? 'btn-disabled submit-btn' : 'submit-btn'"
+        >
+            Отправить
+        </button>
+    </div>
+</div>

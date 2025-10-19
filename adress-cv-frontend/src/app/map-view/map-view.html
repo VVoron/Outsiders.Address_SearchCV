@@ -1,0 +1,22 @@
+<div #wrapEl class="wrap" [ngStyle]="{ height: height, minHeight: minHeight }">
+  <div #mapEl class="map" aria-label="map"></div>
+
+  @if (showControls) { 
+    <div class="controls"> 
+      <div class="field"> 
+        <label for="lat">Широта (Lat)</label> 
+        <input id="lat" class="coord" type="text" [(ngModel)]="latStr" placeholder="55.74724" (keydown.enter)="goToInputCoords()" /> 
+      </div> <div class="field"> 
+        <label for="lon">Долгота (Lon)</label> 
+        <input id="lon" class="coord" type="text" [(ngModel)]="lonStr" placeholder="24.1052" (keydown.enter)="goToInputCoords()" /> 
+      </div> 
+      <button class="go" (click)="goToInputCoords()">Показать</button> 
+    </div> 
+  }
+  @if (allowClickToMove){
+    <div class="hint">
+      Клик по карте — переместит маркер и обновит поля (если включено)
+    </div>
+  }
+  
+</div>

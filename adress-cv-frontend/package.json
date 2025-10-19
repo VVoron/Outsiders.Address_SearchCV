@@ -1,0 +1,86 @@
+{
+  "name": "adress-cv-frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^20.3.5",
+    "@angular/cdk": "^20.2.9",
+    "@angular/common": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/localize": "^20.3.0",
+    "@angular/material": "^20.2.9",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/router": "^20.3.0",
+    "@progress/kendo-angular-buttons": "^20.0.3",
+    "@progress/kendo-angular-common": "20.0.3",
+    "@progress/kendo-angular-conversational-ui": "20.0.3",
+    "@progress/kendo-angular-dateinputs": "20.0.3",
+    "@progress/kendo-angular-dialog": "^20.0.3",
+    "@progress/kendo-angular-dropdowns": "20.0.3",
+    "@progress/kendo-angular-excel-export": "20.0.3",
+    "@progress/kendo-angular-grid": "^20.0.3",
+    "@progress/kendo-angular-icons": "20.0.3",
+    "@progress/kendo-angular-indicators": "^20.0.3",
+    "@progress/kendo-angular-inputs": "^20.0.3",
+    "@progress/kendo-angular-intl": "20.0.3",
+    "@progress/kendo-angular-l10n": "20.0.3",
+    "@progress/kendo-angular-label": "20.0.3",
+    "@progress/kendo-angular-layout": "20.0.3",
+    "@progress/kendo-angular-menu": "^20.0.3",
+    "@progress/kendo-angular-navigation": "20.0.3",
+    "@progress/kendo-angular-pager": "20.0.3",
+    "@progress/kendo-angular-pdf-export": "20.0.3",
+    "@progress/kendo-angular-popup": "20.0.3",
+    "@progress/kendo-angular-progressbar": "20.0.3",
+    "@progress/kendo-angular-schematics": "^20.0.3",
+    "@progress/kendo-angular-toolbar": "20.0.3",
+    "@progress/kendo-angular-treeview": "20.0.3",
+    "@progress/kendo-angular-upload": "^20.0.3",
+    "@progress/kendo-angular-utils": "20.0.3",
+    "@progress/kendo-data-query": "^1.0.0",
+    "@progress/kendo-drawing": "^1.21.0",
+    "@progress/kendo-font-icons": "^4.5.0",
+    "@progress/kendo-licensing": "^1.7.0",
+    "@progress/kendo-svg-icons": "^4.0.0",
+    "@progress/kendo-theme-default": "^12.1.0",
+    "bootstrap": "^5.3.8",
+    "leaflet": "^1.9.4",
+    "maplibre-gl": "^5.9.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.3.6",
+    "@angular/cli": "^20.3.6",
+    "@angular/compiler-cli": "^20.3.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine-core": "~5.9.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.9.2"
+  }
+}

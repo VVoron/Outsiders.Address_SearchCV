@@ -1,0 +1,220 @@
+<div class="header-row">
+  <div class="filters-shell" [class.expanded]="isDateFilterExpanded">
+    <div class="bar">
+      <button class="icon-btn" (click)="toggleLeftMenu()">
+        <svg width="34" height="43" viewBox="0 0 34 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M27.4632 1.86294C29.0622 2.94863 30.1481 4.65762 30.477 6.61925C30.8059 8.58189 30.3489 10.636 29.2006 12.3274L17.1364 30.0964C16.445 31.1147 15.3981 31.8254 14.2304 32.0765C13.0637 32.3273 11.8733 32.0991 10.9174 31.4501C9.96151 30.8011 9.31016 29.7788 9.11288 28.602C8.91543 27.424 9.18975 26.1887 9.88107 25.1704L20.5153 9.50771L22.1126 10.5922L11.4784 26.2549C11.1032 26.8075 10.9505 27.4836 11.06 28.1368C11.1697 28.791 11.5346 29.3691 12.0792 29.7389C12.6238 30.1087 13.2958 30.2345 13.9443 30.0952C14.5918 29.9559 15.1639 29.5645 15.5391 29.0119L27.6033 11.2429C28.4355 10.0171 28.7709 8.52236 28.5299 7.08438C28.2887 5.64536 27.4892 4.38067 26.3014 3.57416C25.1135 2.76766 23.6424 2.49072 22.2158 2.79746C20.7905 3.10403 19.5248 3.96731 18.6926 5.19295L4.33043 26.3464C3.04113 28.2454 2.52263 30.5596 2.89517 32.7824C3.26796 35.0062 4.50329 36.9573 6.33424 38.2005C8.16524 39.4436 10.4344 39.8719 12.6389 39.3979C14.8424 38.9241 16.8019 37.5884 18.0913 35.6893L31.0233 16.6421L32.6206 17.7266L19.6886 36.7738C18.0831 39.1385 15.6485 40.7935 12.925 41.3792C10.2024 41.9646 7.4146 41.434 5.17241 39.9117C2.93031 38.3894 1.40933 35.9945 0.948899 33.2481C0.488317 30.5005 1.1276 27.6267 2.73313 25.262L17.0953 4.10847C18.2436 2.41721 19.9844 1.23461 21.9298 0.816145C23.8744 0.39801 25.8642 0.777264 27.4632 1.86294Z" fill="#1B1C1C" stroke="#FEF8E4"/>
+        </svg>
+      </button>
+
+      <div class="search">
+        <label for="searchField">Введите адрес или координаты</label>
+        <kendo-textbox
+          id=searchField
+          [placeholder]="'Введите адрес или координаты'"
+          [(value)]="textFilter"
+          (valueChange)="onTextFilterChange()">
+        </kendo-textbox>
+      </div>
+
+      <button class="icon-btn" (click)="toggleDateFilter()">
+        <svg width="45" height="46" viewBox="0 0 45 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_299_1000)">
+          <path d="M13.25 1.48395V5.57574H31.6504V1.48395H33.75V5.57574H36.7998C37.6226 5.57574 38.412 5.902 38.9932 6.48199C39.574 7.0618 39.9003 7.84763 39.9004 8.66656V19.942H37.7998V13.8043H7.09961V38.3072H27.5996V40.399H8.09961C7.27691 40.3989 6.48834 40.0726 5.90723 39.4927C5.32611 38.9128 5 38.1264 5 37.3072V8.66656L5.00391 8.50934C5.08711 6.8854 6.44822 5.57595 8.09961 5.57574H11.1504V1.48395H13.25ZM33.7002 34.9019L33.4717 34.6255L27.7314 27.6695L27.7275 27.6656L27.6582 27.5679C27.5156 27.3271 27.5041 26.9976 27.6748 26.6568C27.8698 26.2679 28.2239 26.0329 28.5996 26.0328H42.9502C43.1456 26.0328 43.337 26.0877 43.5029 26.19C43.6687 26.2923 43.8027 26.4384 43.8896 26.6119C43.9765 26.7854 44.0135 26.9795 43.9961 27.1724C43.9791 27.3602 43.91 27.5392 43.7988 27.692L38.0791 34.6255L37.8496 34.9019V44.0172C37.8496 44.2137 37.7332 44.3776 37.5811 44.4488C37.5109 44.4816 37.4422 44.4901 37.3779 44.4791C37.3178 44.4686 37.2188 44.4339 37.0967 44.3121L37.0908 44.3062L33.7002 40.9791V34.9019Z" fill="#1B1C1C" stroke="#FEF8E4" stroke-width="2"/>
+          </g>
+          <defs>
+          <clipPath id="clip0_299_1000">
+          <rect width="45" height="45" fill="white" transform="translate(0 0.483948)"/>
+          </clipPath>
+          </defs>
+        </svg>
+      </button>
+
+      <div class="date-inline" [class.expanded]="isDateFilterExpanded">
+        <kendo-datepicker
+          [format]="'dd.MM.yyyy'"
+          [(value)]="dateRange.from"
+          (valueChange)="onDateFilterChange()"
+          placeholder="ДД.ММ.ГГ">
+        </kendo-datepicker>
+
+        <span class="dash">—</span>
+
+        <kendo-datepicker
+          [format]="'dd.MM.yyyy'"
+          [(value)]="dateRange.to"
+          (valueChange)="onDateFilterChange()"
+          placeholder="ДД.ММ.ГГ">
+        </kendo-datepicker>
+      </div>
+
+      @if (isDateFilterExpanded) {
+        <button class="icon-btn" (click)="toggleDateFilter();">
+          <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_309_933)">
+            <path d="M1.41406 22.5L22.5 43.586L25.1201 40.9659L8.49512 24.3409H44V20.6592H8.49512L25.1201 4.03421L22.5 1.41409L1.41406 22.5Z" fill="#1B1C1C" stroke="#FEF8E4" stroke-width="2"/>
+            </g>
+            <defs>
+            <clipPath id="clip0_309_933">
+            <rect width="45" height="45" fill="white" transform="matrix(-1 0 0 1 45 3.05176e-05)"/>
+            </clipPath>
+            </defs>
+          </svg>
+        </button>
+      }
+
+      @if (isEmptyFilters()) {
+        <button [disabled]="true" class="icon-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
+            <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/>
+          </svg>
+        </button>
+      }
+      @else{
+        <button class="icon-btn" (click)="clearTextFilter(); clearDateFilter();">
+          <svg width="53" height="53" viewBox="0 0 53 53" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.23048 0L0 3.20524L21.1748 24.3295L22.361 25.9195H22.4367V40.7343C22.3357 41.4662 22.5881 42.2486 23.1686 42.8291L28.2414 47.9019C29.2257 48.8862 30.8157 48.8862 31.8 47.9019C32.3805 47.3719 32.6329 46.5643 32.5319 45.8071V35.7371L49.7948 53L53 49.7948L32.5319 29.3267L20.9476 17.7424L7.67238 4.46714L3.23048 0ZM12.8714 3.20524L33.8948 24.2538L47.1448 7.29381C47.5546 6.76767 47.7395 6.1007 47.6591 5.43863C47.5788 4.77657 47.2396 4.17324 46.7157 3.76048C46.2362 3.40714 45.7062 3.20524 45.151 3.20524H12.8714Z" fill="currentColor"/>
+          </svg>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="title-shell" [class.underplay]="isDateFilterExpanded">
+    @if (!isDateFilterExpanded){
+      <div class="title">История запросов</div>
+    }
+    <button class="right-menu-btn" (click)="toggleRightMenu()">
+      <svg width="69" height="73" viewBox="0 0 69 73" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M34 62.1002C32.8954 62.1002 32 61.2047 32 60.1002V58.0801C32 56.9756 32.8954 56.0801 34 56.0801H35.75C36.8546 56.0801 37.75 56.9756 37.75 58.0801V60.1002C37.75 61.2047 36.8546 62.1002 35.75 62.1002H34ZM34 50.0601C32.8954 50.0601 32 49.1647 32 48.0601V46.0401C32 44.9355 32.8954 44.0401 34 44.0401H35.75C36.8546 44.0401 37.75 44.9355 37.75 46.0401V48.0601C37.75 49.1647 36.8546 50.0601 35.75 50.0601H34ZM34 38.0201C32.8954 38.0201 32 37.1246 32 36.0201V34C32 32.8955 32.8954 32 34 32H35.75C36.8546 32 37.75 32.8955 37.75 34V36.0201C37.75 37.1246 36.8546 38.0201 35.75 38.0201H34Z" fill="white"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="left-menu" [class.active]="isLeftMenuOpened">
+    <button class="icon-btn" (click)="openPhotoDialog()">
+      <svg width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24.8 0C25.5161 0 26.2028 0.406376 26.7092 1.12973C27.2155 1.85309 27.5 2.83417 27.5 3.85714V23.1429C27.5 24.1658 27.2155 25.1469 26.7092 25.8703C26.2028 26.5936 25.5161 27 24.8 27H3.2C2.48392 27 1.79716 26.5936 1.29081 25.8703C0.784463 25.1469 0.5 24.1658 0.5 23.1429V3.85714C0.5 1.71643 1.7015 0 3.2 0H24.8ZM4.55 21.2143H23.45L17.375 9.64286L12.65 18.3214L9.275 12.5357L4.55 21.2143Z" fill="white"/>
+      </svg>
+      &nbsp;
+      Фото
+    </button>
+
+    <button class="icon-btn" (click)="openArchiveDialog()">
+      <svg width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24.8 3.375H14L11.3 0H3.2C1.715 0 0.5 1.51875 0.5 3.375V23.625C0.5 25.4813 1.715 27 3.2 27H24.8C26.285 27 27.5 25.4813 27.5 23.625V6.75C27.5 4.89375 26.285 3.375 24.8 3.375ZM22.1 13.5H19.4V16.875H22.1V20.25H19.4V23.625H16.7V20.25H19.4V16.875H16.7V13.5H19.4V10.125H16.7V6.75H19.4V10.125H22.1V13.5Z" fill="white"/>
+      </svg>
+      &nbsp;
+      Архив
+    </button>
+  </div>
+
+  <div class="right-menu" [class.active]="isRightMenuOpened">
+    <button class="icon-btn">
+      <svg width="35" height="35" viewBox="0 0 35 35" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_299_896)">
+        <path d="M31.36 17.64L17.5 31.5L3.64 17.64L6.125 15.1725L15.75 24.7975V0H19.25V24.7975L28.875 15.155L31.36 17.64ZM17.5 31.5H0V35H35V31.5H17.5Z" fill="currentColor"/>
+        </g>
+        <defs>
+        <clipPath id="clip0_299_896">
+        <rect width="35" height="35" fill="white"/>
+        </clipPath>
+        </defs>
+      </svg>
+    </button>
+
+    <button class="icon-btn" (click)="remove()">
+      <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6.5625 35C5.35938 35 4.32979 34.6195 3.47375 33.8586C2.61771 33.0977 2.18896 32.1818 2.1875 31.1111V5.83333H0V1.94444H10.9375V0H24.0625V1.94444H35V5.83333H32.8125V31.1111C32.8125 32.1805 32.3845 33.0964 31.5284 33.8586C30.6724 34.6208 29.6421 35.0013 28.4375 35H6.5625ZM28.4375 5.83333H6.5625V31.1111H28.4375V5.83333ZM10.9375 27.2222H15.3125V9.72222H10.9375V27.2222ZM19.6875 27.2222H24.0625V9.72222H19.6875V27.2222Z" fill="white" fill-opacity="0.59"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div class="image-grid">
+  <app-image-grid [data]="(filteredData$ | async) ?? []"
+                  (selectedChange)="onGridSelection($event)" 
+                  [total]="total"
+                  [pageSize]="pageSize"
+                  [skip]="skip"
+                  (pageChange)="onPageChange($event)"
+                  />
+</div>
+
+<input type="file" #fileInput (change)="onPhotoFilesSelected($event)" multiple accept="image/*" hidden>
+<input type="file" #archiveInput (change)="onArchiveSelected($event)" accept=".zip" hidden>
+
+<div class="dual-button">
+  <button class="btn-icon btn-left" (click)="onRefresh()">
+    <svg width="43" height="38" viewBox="0 0 43 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4.25169 24.6493C6.92697 30.4468 13.5776 34.5543 21.3581 34.5543C31.4968 34.5543 39.7162 27.5834 39.7162 18.9848M38.4646 13.3204C35.7926 7.52149 29.1403 3.4154 21.3581 3.4154C11.2194 3.4154 3 10.3863 3 18.9848M16.3514 24.6465H3V35.9697M39.7162 2V13.3232H26.3649" stroke="#1B1C1C" stroke-opacity="0.75" stroke-width="5"/>
+    </svg>
+  </button>
+  <button
+    [disabled]="!selected.length" 
+    (click)="openDialog()" 
+    [className]="!selected.length ? 'btn-disabled btn-text btn-right' : 'btn-text btn-right'"
+  >
+    Отобразить на карте
+  </button>
+</div>
+
+
+@if (dialogOpen) {
+  <kendo-dialog (close)="closeDialog()" style="border-radius: 30px;">
+    <div style="display: flex;flex-direction: row;">
+      <span style="margin-right: 32px;">
+        <ul class="list">
+          @for (item of selected; track item.id) {
+            <li style="padding: 8px; border: 1px solid black; border-radius: 8px;">
+              <div>№{{ item.id }}</div>
+              <div>{{ item.coordinates }}</div>
+            </li>
+          }
+        </ul>
+      </span>
+      <app-map-view
+        [height]="'100%'"
+        [minHeight]="'640px'"
+        [showControls]="false"
+        [points]="selectedPoints"
+        [allowClickToMove]="false"
+        style="min-width: 1000px;"
+      ></app-map-view>
+    </div>
+  </kendo-dialog>
+}
+
+
+<ng-template #jsonDialog let-dialogRef="dialogRef">
+  <div class="archive-dialog">
+    <h2 mat-dialog-title>Загрузка архива фото</h2>
+
+    <mat-dialog-content>
+      <p>
+        Для загрузки фото посредством архива необходимо также загрузить JSON-файл в формате:
+      </p>
+
+      <pre class="json-example">
+          &#123;
+            [
+              &#123;
+                "image": "&lt;название файла&gt;",
+                "address": "&lt;адрес фото (если известен)&gt;",
+                "lat": &lt;долгота&gt;,
+                "lon": &lt;широта&gt;,
+                "height": &lt;высота&gt;,
+                "angle": &lt;угол фото&gt;
+              &#125;
+            ]
+          &#125;
+      </pre>
+    </mat-dialog-content>
+
+    <mat-dialog-actions [align]="'center'">
+      <button mat-flat-button color="primary" (click)="dialogRef.close('choose')">Выбрать JSON</button>
+      <button mat-button (click)="dialogRef.close('skip')">Продолжить без JSON</button>
+      <button mat-button color="warn" (click)="dialogRef.close('cancel')">Отмена</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

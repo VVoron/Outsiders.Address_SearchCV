@@ -1,0 +1,49 @@
+<div class="auth-container">
+  <div class="auth-card" style="height: 700px !important; margin-top: 50px !important;">
+    <h1 style="text-align: center;">РЕГИСТРАЦИЯ</h1>
+
+    <form (ngSubmit)="submit()" [formGroup]="form" novalidate>
+      <label>
+        <div style="margin-left: 43px; color: rgba(79, 81, 83, 1);">Введите почту</div>
+        <input type="email" formControlName="email" placeholder="Почта пользователя" />
+      </label>
+      <div class="err" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+        Некорректный email
+      </div>
+
+      <label>
+        <div style="margin-left: 43px; color: rgba(79, 81, 83, 1);">Введите логин</div>
+        <input type="text" formControlName="username" placeholder="Логин пользователя" />
+      </label>
+      <div class="err" *ngIf="form.controls.username.touched && form.controls.username.invalid">
+        Укажите логин (мин. 3 символа)
+      </div>
+
+      <label>
+        <div style="margin-left: 43px; color: rgba(79, 81, 83, 1);">Введите пароль</div>
+        <input type="password" formControlName="password" placeholder="********************" />
+      </label>
+      <div class="err" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+        Минимум 6 символов
+      </div>
+
+      <label>
+        <div style="margin-left: 43px; color: rgba(79, 81, 83, 1);">Повторите пароль</div>
+        <input type="password" formControlName="re_password" placeholder="********************" />
+      </label>
+      <div class="err" *ngIf="mismatch">Пароли не совпадают</div>
+
+      <div class="server-err" *ngIf="serverError">{{ serverError }}</div>
+      <div class="success" *ngIf="success">Успешно! Перенаправляем на страницу входа…</div>
+      <div class="btn-container" style="margin-top: 20px !important;">
+        <button [disabled]="loading">{{ loading ? 'Отправка…' : 'Зарегистрироваться' }}</button>
+      </div>
+    </form>
+    <div style="text-align: center; height: 20px; ">
+      <a routerLink="/login" class="muted">У меня уже есть аккаунт</a>
+    </div>
+    
+  </div>
+
+</div>
+

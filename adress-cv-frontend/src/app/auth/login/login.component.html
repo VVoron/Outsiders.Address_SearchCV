@@ -1,0 +1,35 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h1 style="text-align: center;">Кто ты?</h1>
+
+    <form (ngSubmit)="submit()" [formGroup]="form" novalidate>
+      <label>
+        <div style="margin-left: 43px; color: rgba(79, 81, 83, 1);">Введите логин</div>
+        <input type="text" formControlName="username" placeholder="Логин пользователя" class="" />
+      </label>
+      <div class="err" *ngIf="form.controls.username.touched && form.controls.username.invalid">
+        * Укажите логин
+      </div>
+
+      <label>
+        <div style="margin-left: 43px; color: rgba(79, 81, 83, 1)">Введите пароль</div>
+        
+        <input type="password" formControlName="password" placeholder="********************" />
+      </label>
+      <div class="err" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+        Минимум 6 символов
+      </div>
+
+      <div class="server-err" *ngIf="serverError">* {{ serverError }}</div>
+
+      <div class="btn-container" style="margin-top: 60px !important;">
+        <button [disabled]="loading" style="width: 60%;">{{ loading ? 'Входим…' : 'Войти' }}</button>
+      </div>
+    </form>
+
+    <div style="text-align: center; height: 20px; ">
+      <a routerLink="/register" class="muted">Нет аккаунта? Зарегистрируйтесь</a>
+    </div>
+  </div>
+</div>
+
