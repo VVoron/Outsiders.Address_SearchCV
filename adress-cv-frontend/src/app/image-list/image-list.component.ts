@@ -7,7 +7,6 @@ import { finalize, map } from 'rxjs/operators';
 import { TextBoxModule } from '@progress/kendo-angular-inputs';
 import { DatePickerModule } from '@progress/kendo-angular-dateinputs';
 import { ImageLocationsService } from '../services/image-locations.service';
-import { DialogComponent } from "@progress/kendo-angular-dialog";
 import { MapViewComponent } from "../map-view/map-view";
 import { PhotoManagerComponent } from "./photo-manager/photo-manager.component";
 import { MatDialog, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
@@ -16,7 +15,7 @@ import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
 
 @Component({
   selector: 'app-image-list',
-  imports: [ImageGridComponent, TextBoxModule, DatePickerModule, AsyncPipe, DialogComponent, MapViewComponent, MatDialogContent, MatDialogActions],
+  imports: [ImageGridComponent, TextBoxModule, DatePickerModule, AsyncPipe, MapViewComponent, MatDialogContent, MatDialogActions],
   templateUrl: './image-list.component.html',
   styleUrl: './image-list.component.scss'
 })
@@ -25,6 +24,8 @@ export class ImageListComponent {
   @ViewChild('archiveInput') archiveInput!: ElementRef<HTMLInputElement>;
 
   @ViewChild('jsonDialog') jsonDialogTemplate!: TemplateRef<any>;
+  @ViewChild('mapDialog') mapDialogTemplate!: TemplateRef<any>;
+  @ViewChild('deleteDialog') deleteDialogTemplate!: TemplateRef<any>;
 
   private api = inject(ImageLocationsService);
 
@@ -36,8 +37,6 @@ export class ImageListComponent {
 
   selectedArchive: File | null = null;
   selectedJson: File | null = null;
-
-  dialogOpen = false;
 
   textFilter = '';
   isTextFilterExpanded = false;
@@ -121,11 +120,13 @@ export class ImageListComponent {
   openDialog() {
     console.log(this.selected);
     if (!this.selected.length) return;
-    this.dialogOpen = true;
-  }
-
-  closeDialog() {
-    this.dialogOpen = false;
+    
+    this.dialog.open(this.mapDialogTemplate, {
+      disableClose: false,
+      width: '90%',
+      maxWidth: '1500px',
+      autoFocus: false,
+    });
   }
 
   toggleLeftMenu(){
@@ -195,11 +196,9 @@ export class ImageListComponent {
       }
     }
 
-    // Опционально удалим дубликаты (по ~6 знаков)
     const uniq = new Map<string, { lat: number; lon: number }>();
     for (const p of pts) uniq.set(`${p.lat.toFixed(6)}:${p.lon.toFixed(6)}`, p);
 
-    // Фолбэк: если ни одной мусорной точки нет — вернём основные
     const result = Array.from(uniq.values());
     return result.length ? result : this.selected.map(s => ({ lat: s.lat, lon: s.lon }));
   }
@@ -256,7 +255,7 @@ export class ImageListComponent {
   openJsonDialog() {
     const dialogRef = this.dialog.open(this.jsonDialogTemplate, {
       width: '500px',
-      disableClose: true,
+      disableClose: false,
       autoFocus: false,
     });
 
@@ -302,5 +301,17 @@ export class ImageListComponent {
           this.error = 'Не удалось загрузить архив';
         }
       });
+  }
+
+  openDeleteDialog(){
+    const dialogRef = this.dialog.open(this.deleteDialogTemplate, {
+      width: '500px',
+      disableClose: false,
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result: 'delete') => {
+      if (result === 'delete') this.remove();
+    });
   }
 }

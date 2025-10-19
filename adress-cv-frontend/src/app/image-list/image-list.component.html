@@ -123,7 +123,7 @@
       </svg>
     </button>
 
-    <button class="icon-btn" (click)="remove()">
+    <button class="icon-btn" (click)="openDeleteDialog()" [disabled]="selected.length === 0">
       <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M6.5625 35C5.35938 35 4.32979 34.6195 3.47375 33.8586C2.61771 33.0977 2.18896 32.1818 2.1875 31.1111V5.83333H0V1.94444H10.9375V0H24.0625V1.94444H35V5.83333H32.8125V31.1111C32.8125 32.1805 32.3845 33.0964 31.5284 33.8586C30.6724 34.6208 29.6421 35.0013 28.4375 35H6.5625ZM28.4375 5.83333H6.5625V31.1111H28.4375V5.83333ZM10.9375 27.2222H15.3125V9.72222H10.9375V27.2222ZM19.6875 27.2222H24.0625V9.72222H19.6875V27.2222Z" fill="white" fill-opacity="0.59"/>
       </svg>
@@ -159,10 +159,15 @@
   </button>
 </div>
 
+<ng-template #mapDialog let-dialogRef="dialogRef">
+  <div class="archive-dialog">
+    <div class="dialog-header">
+      <h2 mat-dialog-title>Карта нарушений</h2>
+      <button class="close-btn" (click)="dialogRef.close()">×</button>
+    </div>
 
-@if (dialogOpen) {
-  <kendo-dialog (close)="closeDialog()" style="border-radius: 30px;">
-    <div style="display: flex;flex-direction: row;">
+    <mat-dialog-content style="max-height: fit-content">
+      <div style="display: flex;flex-direction: row;">
       <span style="margin-right: 32px;">
         <ul class="list">
           @for (item of selected; track item.id) {
@@ -182,13 +187,17 @@
         style="min-width: 1000px;"
       ></app-map-view>
     </div>
-  </kendo-dialog>
-}
+    </mat-dialog-content>
+  </div>
+</ng-template>
 
 
 <ng-template #jsonDialog let-dialogRef="dialogRef">
   <div class="archive-dialog">
-    <h2 mat-dialog-title>Загрузка архива фото</h2>
+    <div class="dialog-header">
+      <h2 mat-dialog-title>Загрузка архива фото</h2>
+      <button class="close-btn" (click)="dialogRef.close('cancel')">×</button>
+    </div>
 
     <mat-dialog-content>
       <p>
@@ -215,6 +224,28 @@
       <button mat-flat-button color="primary" (click)="dialogRef.close('choose')">Выбрать JSON</button>
       <button mat-button (click)="dialogRef.close('skip')">Продолжить без JSON</button>
       <button mat-button color="warn" (click)="dialogRef.close('cancel')">Отмена</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+
+<ng-template #deleteDialog let-dialogRef="dialogRef">
+  <div class="archive-dialog">
+    <div class="dialog-header">
+      <h2 mat-dialog-title>Удаление фотографий</h2>
+      <button class="close-btn" (click)="dialogRef.close()">×</button>
+    </div>
+
+    <mat-dialog-content>
+      <p>
+        Вы уверены, что хотите удалить все выбранные фотографии? <br/>
+        Вместе с ними будут удалены все связанные данные.
+      </p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions [align]="'center'">
+      <button mat-flat-button (click)="dialogRef.close('delete')">Удалить</button>
+      <button mat-button (click)="dialogRef.close()">Отмена</button>
     </mat-dialog-actions>
   </div>
 </ng-template>
