@@ -1,0 +1,7 @@
+GeoClipService/model_data/
+GeoClipService/wwwroot/model_data/geo_clip_model.onnx
+OverpassApi/db/changes.log
+OverpassApi/db/cookie.jar
+OverpassApi/db/init_done
+OverpassApi/db/region.osm.bz2
+S3/.en
