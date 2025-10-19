@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import maplibregl, { Map, Marker, LngLatLike, LngLatBoundsLike } from 'maplibre-gl';
 import type { FeatureCollection, Feature, Polygon, Position } from 'geojson';
+import { ImageLocationsService } from '../services/image-locations.service';
 
 const DEFAULTS = {
   lat: 55.74724,
@@ -37,6 +38,8 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() autoFit = true;
   @Input() fitPadding = 40;
 
+  private searchMarkers: Marker[] = [];
+
   @Output() pointChange = new EventEmitter<{ lat: number; lon: number }>();
   @Output() mapReady = new EventEmitter<maplibregl.Map>();
 
@@ -56,6 +59,8 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
   private readonly circleSourceId = 'user-circle-src';
   private readonly circleFillId = 'user-circle-fill';
   private readonly circleStrokeId = 'user-circle-stroke';
+
+  constructor(private imageSvc: ImageLocationsService) {}
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -95,8 +100,16 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
         const lon = Number(e.lngLat.lng.toFixed(12));
         this.latStr = lat.toString();
         this.lonStr = lon.toString();
+
         this.updateActiveMarker(lat, lon, true);
         this.updateCircle(lat, lon, 1);
+
+
+        this.imageSvc.getTrashByCoordinates(lat, lon, 1).subscribe({
+          next: (items) => this.renderSearchMarkers(items),
+          error: () => this.renderSearchMarkers([]),
+        });
+
         this.pointChange.emit({ lat, lon });
       });
     }
@@ -111,6 +124,20 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
       this.mapReady.emit(this.map!);
     });
+  }
+
+  private renderSearchMarkers(points: { lat: number; lon: number }[]): void {
+    if (!this.map) return;
+
+    this.searchMarkers.forEach(m => m.remove());
+    this.searchMarkers = [];
+
+    for (const p of points) {
+      const m = new maplibregl.Marker({ draggable: false, color: '#ef4444' })
+        .setLngLat([p.lon, p.lat])
+        .addTo(this.map!);
+      this.searchMarkers.push(m);
+    }
   }
 
   private addStaticMarkers() {
@@ -168,7 +195,13 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     const nLon = +lon.toFixed(12);
 
     this.updateActiveMarker(nLat, nLon, true);
-    this.updateCircle(nLat, nLon, 1); 
+    this.updateCircle(nLat, nLon, 1);
+
+    this.imageSvc.getTrashByCoordinates(nLat, nLon, 1).subscribe({
+      next: (items) => this.renderSearchMarkers(items),
+      error: () => this.renderSearchMarkers([]),
+    });
+
     this.latStr = nLat.toFixed(12);
     this.lonStr = nLon.toFixed(12);
     this.pointChange.emit({ lat: nLat, lon: nLon });
