@@ -17,6 +17,11 @@ function parseCoord(v: string | number): number {
   return parseFloat(String(v).trim().replace(',', '.'));
 }
 
+const MARKER_SIZES = {
+  active: 48,
+  trash:  40,
+} as const;
+
 
 @Component({
   selector: 'app-map-view',
@@ -161,7 +166,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     for (const p of points) {
       const el = this.makeImgMarkerEl(
         this.resolvePublicUrl('red_marker.svg'),
-        30,
+        MARKER_SIZES.trash,
         'Точка мусора'
       );
 
@@ -181,10 +186,17 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     if (!this.map) return;
 
     for (const p of this.points) {
+      const el = this.makeImgMarkerEl(
+        this.resolvePublicUrl('red_marker.svg'),
+        MARKER_SIZES.trash,
+        'Точка мусора'
+      );
+
       const m = new maplibregl.Marker({
-        draggable: false,
-        color: '#ef4444',
-      })
+          element: el,
+          draggable: false,
+          anchor: 'bottom',
+        })
         .setLngLat([p.lon, p.lat])
         .addTo(this.map!);
 
@@ -271,7 +283,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     const el = this.makeImgMarkerEl(
       this.resolvePublicUrl('search_marker.svg'),
-      34,
+      MARKER_SIZES.active,
       'Выбранная точка'
     );
 
@@ -279,7 +291,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
         element: el,
         draggable: false,
         anchor: 'bottom',
-        // offset: [0, 0],
+        // offset: [0, -2],
       })
       .setLngLat([lon, lat])
       .addTo(this.map!);
