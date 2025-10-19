@@ -165,7 +165,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     for (const p of points) {
       const el = this.makeImgMarkerEl(
-        this.resolvePublicUrl('red_marker.svg'),
+        this.resolvePublicUrl('search_marker.svg'),
         MARKER_SIZES.trash,
         'Точка мусора'
       );
@@ -187,7 +187,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     for (const p of this.points) {
       const el = this.makeImgMarkerEl(
-        this.resolvePublicUrl('red_marker.svg'),
+        this.resolvePublicUrl('search_marker.svg'),
         MARKER_SIZES.trash,
         'Точка мусора'
       );
@@ -282,7 +282,7 @@ export class MapViewComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     const el = this.makeImgMarkerEl(
-      this.resolvePublicUrl('search_marker.svg'),
+      this.resolvePublicUrl('red_marker.svg'),
       MARKER_SIZES.active,
       'Выбранная точка'
     );
