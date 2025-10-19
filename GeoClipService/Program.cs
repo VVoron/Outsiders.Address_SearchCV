@@ -1,6 +1,5 @@
 using Amazon.Runtime;
 using Amazon.S3;
-using DotNetEnv;
 using GeoClipService;
 using GeoClipService.Models;
 using GeoClipService.Services;
@@ -9,13 +8,15 @@ using Hangfire.PostgreSql;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
-Env.Load();
+
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.Configure<S3Options>(builder.Configuration.GetSection("S3"));
+builder.Services.Configure<YoloOptions>(builder.Configuration.GetSection("Yolo"));
 
 var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
@@ -51,27 +52,23 @@ var configPath = Path.Combine(builder.Environment.WebRootPath, "model_data", "pr
 
 builder.Services.AddSingleton<IAmazonS3>(sp =>
 {
-    var configuration = sp.GetRequiredService<IConfiguration>();
+    var s3 = sp.GetRequiredService<IOptions<S3Options>>().Value;
 
-    var accessKey = configuration["AWS_ACCESS_KEY_ID"] ?? "recognition";
-    var secretKey = configuration["AWS_SECRET_ACCESS_KEY"] ?? "recognition_password";
-    var serviceUrl = configuration["AWS_S3_ENDPOINT_URL"] ?? "http://51.250.115.228:9000";
-    var regionName = configuration["AWS_S3_REGION_NAME"] ?? "us-east-1";
-
-    var creds = new BasicAWSCredentials(accessKey, secretKey);
+    var creds = new BasicAWSCredentials(s3.AccessKeyId, s3.SecretAccessKey);
 
     var s3Config = new AmazonS3Config
     {
-        ServiceURL = serviceUrl,
-        ForcePathStyle = true,
-        AuthenticationRegion = regionName,
-        UseHttp = serviceUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+        ServiceURL = s3.EndpointUrl,
+        ForcePathStyle = s3.ForcePathStyle,
+        AuthenticationRegion = s3.RegionName,
+        UseHttp = s3.EndpointUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
     };
 
     return new AmazonS3Client(creds, s3Config);
 });
 
 builder.Services.AddSingleton<PredictService>(_ => new PredictService(modelPath, configPath));
+builder.Services.AddSingleton<YoloService>();
 builder.Services.AddScoped<IncomingJobService>();
 builder.Services.AddScoped<CallbackService>();
 builder.Services.AddScoped<S3Service>();

@@ -27,7 +27,7 @@ public sealed class PredictionController(IBackgroundJobClient jobs) : Controller
             try
             {
                 var jobId = jobs.Enqueue<IncomingJobService>(
-                    h => h.HandleAsync(task, payload.CallbackUrl)
+                    h => h.HandleAsync(task, payload.MainCallback, payload.TrashCallback)
                 );
 
                 jobsList.Add(jobId);

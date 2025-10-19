@@ -2,12 +2,17 @@
 
 public class PredictRequest
 {
-    public string CallbackUrl { get; set; } = null!;
+    public string MainCallback { get; set; } = null!;
+    public string TrashCallback { get; set; } = null!;
     public IEnumerable<PredictDto> Tasks { get; set; }
 }
 
 public class PredictDto
 {
-    public string FileName { get; set; } = null!;
     public string TaskId { get; set; } = null!;
+    public string FileName { get; set; } = null!;
+    public double? Angle { get; set; }
+    public double? Height { get; set; }
+    public double? Lat { get; set; }
+    public double? Lon { get; set; }
 }
