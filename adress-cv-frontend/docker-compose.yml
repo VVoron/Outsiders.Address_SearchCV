@@ -1,17 +1,12 @@
-version: "3.9"
-
 services:
-  frontend-build:
+  build_frontend:
     image: node:20-alpine
-    working_dir: /app
+    working_dir: /src
     volumes:
-      - ./:/app:rw
-      - /var/www/adress-cv-frontend:/out:rw
-    environment:
-      - CI=true
+      - ./:/src
+      - /var/www/adress-cv-frontend:/out
     command: >
-      sh -c "
-        corepack enable &&
-        npm ci &&
-        npx ng build --configuration production --output-path /out
-      "
+      sh -c "npm ci &&
+             npm run build -- --configuration production --output-path=dist &&
+             rm -rf /out/* &&
+             cp -r dist/* /out/"
